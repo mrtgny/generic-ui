@@ -11,7 +11,7 @@ export {default as QueryAutoComplete} from './components/QueryAutoComplete';
 export {default as QuerySelect} from './components/QuerySelect';
 export {default as Rate} from './components/Rate';
 export {default as Section} from './components/Section';
-export {default as SelectItemsRenderer} from './components/SelectItemsRenderer';
+export {default as Selectfield} from './components/Selectfield';
 export {default as Tag} from './components/Tag';
 export {default as Textfield} from './components/Textfield';
 export {default as TextListField} from './components/TextListField';

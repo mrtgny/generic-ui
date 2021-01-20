@@ -955,6 +955,67 @@ var Section = function Section(props) {
   }, title) : null, extra), children);
 };
 
+var Selectfield = function Selectfield(props) {
+  var className = props.className,
+      label = props.label,
+      items = props.items,
+      value = props.value,
+      _descriptionKey = props.descriptionKey,
+      _valueKey = props.valueKey,
+      _onChange = props.onChange,
+      _selectFieldClassName = props.selectFieldClassName;
+  var selectFieldClassName = "select-field ";
+  if (_selectFieldClassName) selectFieldClassName += _selectFieldClassName;
+  var valueKey = coalasce(_valueKey, "value");
+  var descriptionKey = coalasce(_descriptionKey, "title");
+  var onChange = useCallback(function (e) {
+    var selectedValueKey = e.target.value;
+
+    var _items$filter = items.filter(function (i) {
+      return i[valueKey] === selectedValueKey;
+    }),
+        _items$filter2 = _slicedToArray(_items$filter, 1),
+        selectedValue = _items$filter2[0];
+
+    _onChange(selectedValue);
+  }, [_onChange, items, valueKey]);
+  return /*#__PURE__*/React.createElement("div", {
+    className: className
+  }, /*#__PURE__*/React.createElement(Show, {
+    condition: label
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 'bold'
+    }
+  }, label)), /*#__PURE__*/React.createElement("select", {
+    name: label,
+    value: value || "",
+    onChange: onChange,
+    className: selectFieldClassName
+  }, /*#__PURE__*/React.createElement(Mapper, {
+    items: items
+  }, /*#__PURE__*/React.createElement(SelectfieldOption, {
+    valueKey: valueKey,
+    descriptionKey: descriptionKey,
+    value: value
+  }))));
+};
+
+var SelectfieldOption = function SelectfieldOption(props) {
+  var valueKey = props.valueKey,
+      _value = props.value,
+      descriptionKey = props.descriptionKey,
+      rest = _objectWithoutProperties(props, ["valueKey", "value", "descriptionKey"]);
+
+  var value = rest[valueKey];
+  var description = rest[descriptionKey];
+  return /*#__PURE__*/React.createElement("option", {
+    value: value,
+    selected: value === _value,
+    className: "select-field-option"
+  }, description);
+};
+
 var Tag = function Tag(props) {
   var _color = props.color,
       className = props.className,
@@ -1156,4 +1217,4 @@ var ThreeDot = function ThreeDot(props) {
   }, children));
 };
 
-export { Button, Card, ColorPicker, EmptyResult, Header, Image, IncDecField, ListItem, OverflowImages, QueryAutoComplete, QuerySelect, Rate, Section, SelectItemsRenderer, Tag, TextListField, Textfield, ThreeDot, appStyles };
+export { Button, Card, ColorPicker, EmptyResult, Header, Image, IncDecField, ListItem, OverflowImages, QueryAutoComplete, QuerySelect, Rate, Section, Selectfield, Tag, TextListField, Textfield, ThreeDot, appStyles };
