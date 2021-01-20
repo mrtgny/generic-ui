@@ -8,6 +8,7 @@ export {default as IncDecField} from './components/IncDecField';
 export {default as ListItem} from './components/ListItem';
 export {default as OverflowImages} from './components/OverflowImages';
 export {default as Card} from './components/Card';
+export {default as Popover} from './components/Popover';
 export {default as Rate} from './components/Rate';
 export {default as Section} from './components/Section';
 export {default as Selectfield} from './components/Selectfield';

@@ -1,20 +1,21 @@
 import React from "react";
-import Tooltip from "rc-tooltip";
+import Popover from "../Popover";
+import {appStyles} from "../../index";
 
 const ThreeDot = props => {
-    const {children} = props;
+    const {title, children} = props;
     return (
-        <div style={{
-            display: 'inline-block',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            width: '100%'
-        }}>
-            <Tooltip overlay={children}>
+        <Popover trigger="mouse"
+                 alignment="top"
+                 overlay={
+                     <div style={appStyles.toolTip}>
+                         {title || children}
+                     </div>
+                 }>
+            <div style={appStyles.threeDot}>
                 {children}
-            </Tooltip>
-        </div>
+            </div>
+        </Popover>
     )
 }
 

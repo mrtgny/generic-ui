@@ -99,6 +99,19 @@ const appStyles = {
         width: '100%',
         objectFit: "cover",
         borderRadius: "50%"
+    },
+    threeDot: {
+        whiteSpace: 'nowrap',
+        width: '100%',
+        display: 'inline-block',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+    },
+    toolTip: {
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        color: 'white',
+        padding: "2px 6px",
+        borderRadius: 10
     }
 }
 

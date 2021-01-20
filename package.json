@@ -11,7 +11,6 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@reactivers/hooks": "file:/Users/muratguney/Desktop/JavaScript/reactivers-library/hooks",
-    "rc-tooltip": "^5.0.2",
     "react-color": "^2.19.3"
   },
   "devDependencies": {
@@ -32,7 +31,6 @@
     "moment": "^2.29.1",
     "history": "^5.0.0",
     "react-router-dom": "^5.2.0",
-    "rc-tooltip": "^5.0.2",
     "react-color": "^2.19.3"
   },
   "scripts": {
