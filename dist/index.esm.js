@@ -1,5 +1,5 @@
 import React, { useState, useCallback, forwardRef, useEffect, useRef, useMemo } from 'react';
-import { takeIf, Show, coalasce, Mapper, useApi, useLocalStorage, generatedColorFromString, changeColor } from '@reactivers/hooks';
+import { takeIf, coalasce, Show, Mapper, useApi, useLocalStorage, generatedColorFromString, changeColor } from '@reactivers/hooks';
 import { Popover, Badge, Select, Tooltip } from 'antd';
 import { SwatchesPicker } from 'react-color';
 
@@ -287,7 +287,6 @@ var appStyles = {
   },
   roundedImage: {
     width: '100%',
-    height: '100%',
     objectFit: "cover",
     borderRadius: "50%"
   }
@@ -314,7 +313,7 @@ var Image = function Image(props) {
     height: _size,
     borderRadius: '50%'
   }, {});
-  var placeholder = takeIf(_placheholder, "P");
+  var placeholder = coalasce(_placheholder, "P");
   var fontSize = takeIf(isNaN(_size / 2), 24, _size / 2);
   var displayImage = takeIf(loaded, undefined, 'none');
   var onLoad = useCallback(function () {
@@ -376,7 +375,9 @@ var Button = function Button(props) {
       justifyContent: 'center',
       alignItems: 'center',
       width: takeIf(iconButton, iconSize),
+      minWidth: takeIf(iconButton, iconSize),
       height: takeIf(iconButton, iconSize),
+      minHeight: takeIf(iconButton, iconSize),
       borderRadius: takeIf(iconButton, "50%")
     }, style || {}),
     type: htmlType,
@@ -436,6 +437,7 @@ var EmptyResult = function EmptyResult(props) {
   var icon = props.icon,
       title = props.title,
       style = props.style,
+      iconClassName = props.iconClassName,
       _size = props.size;
   var size = _size || 120;
   return /*#__PURE__*/React.createElement("div", {
@@ -445,6 +447,7 @@ var EmptyResult = function EmptyResult(props) {
       width: '100%'
     }, appStyles.centerInColumn)
   }, /*#__PURE__*/React.createElement("div", {
+    className: iconClassName,
     style: _objectSpread2(_objectSpread2({}, appStyles.center), appStyles.rounded(size))
   }, icon)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
     style: {
@@ -650,9 +653,10 @@ var Card = function Card(props) {
       childrenContainerStyle = props.childrenContainerStyle,
       children = props.children;
   return /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2(_objectSpread2({}, style || {}), {}, {
-      borderRadius: 10
-    }),
+    style: _objectSpread2({
+      borderRadius: 10,
+      padding: 16
+    }, style || {}),
     className: className
   }, /*#__PURE__*/React.createElement(Show, {
     condition: avatar || title || titleRenderer || description || subtitle
@@ -661,7 +665,8 @@ var Card = function Card(props) {
     title: title,
     titleRenderer: titleRenderer,
     style: _objectSpread2({
-      marginBottom: 4
+      margin: 0,
+      padding: 0
     }, titleContainerStyle || {}),
     titleContainerStyle: headerStyle,
     titleStyle: _objectSpread2({
@@ -962,6 +967,8 @@ var Tag = function Tag(props) {
       onTextClick = props.onTextClick,
       closeIcon = props.closeIcon,
       onClear = props.onClear,
+      closeButtonClassName = props.closeButtonClassName,
+      closeButtonStyle = props.closeButtonStyle,
       children = props.children;
   var type = _type || "outlined";
   var color = _color || (generatedColor ? generatedColorFromString(description) : "#cccccc");
@@ -990,11 +997,11 @@ var Tag = function Tag(props) {
   }, /*#__PURE__*/React.createElement(Button, {
     icon: closeIcon,
     onClick: onClear,
-    soft: true,
-    style: {
+    className: closeButtonClassName,
+    style: _objectSpread2({
       color: 'white',
       marginLeft: 8
-    }
+    }, closeButtonStyle || {})
   })));
 };
 
@@ -1053,6 +1060,7 @@ var TextListField = function TextListField(props) {
       listContainerStyle = props.listContainerStyle,
       _descriptionKey = props.descriptionKey,
       valuesRenderer = props.valuesRenderer,
+      textfieldClassName = props.textfieldClassName,
       label = props.label,
       checkIcon = props.checkIcon,
       valueTransformer = props.valueTransformer;
@@ -1118,6 +1126,7 @@ var TextListField = function TextListField(props) {
     },
     onPressEnter: onSave,
     onBlur: onSave,
+    className: textfieldClassName,
     suffix: /*#__PURE__*/React.createElement(Button, {
       icon: checkIcon,
       type: "primary",

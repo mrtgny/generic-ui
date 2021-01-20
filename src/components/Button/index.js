@@ -35,7 +35,9 @@ const Button = props => {
             justifyContent: 'center',
             alignItems: 'center',
             width: takeIf(iconButton, iconSize),
+            minWidth: takeIf(iconButton, iconSize),
             height: takeIf(iconButton, iconSize),
+            minHeight: takeIf(iconButton, iconSize),
             borderRadius: takeIf(iconButton, "50%"),
             ...(style || {}),
         }}

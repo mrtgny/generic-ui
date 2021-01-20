@@ -10,6 +10,7 @@ const TextListField = props => {
         listContainerStyle,
         descriptionKey: _descriptionKey,
         valuesRenderer,
+        textfieldClassName,
         label,
         checkIcon,
         valueTransformer
@@ -63,6 +64,7 @@ const TextListField = props => {
                            onChange={e => setValue({...value, [descriptionKey]: e.target.value})}
                            onPressEnter={onSave}
                            onBlur={onSave}
+                           className={textfieldClassName}
                            suffix={
                                <Button icon={checkIcon}
                                        type="primary"

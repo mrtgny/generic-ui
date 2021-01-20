@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {Show, takeIf} from "@reactivers/hooks";
+import {coalasce, Show, takeIf} from "@reactivers/hooks";
 import appStyles from '../../utils/styles'
 
 const Image = props => {
@@ -18,7 +18,7 @@ const Image = props => {
     const [loaded, setLoaded] = useState(false);
 
     const size = takeIf(_size, {width: _size, height: _size, borderRadius: '50%'}, {});
-    const placeholder = takeIf(_placheholder, "P");
+    const placeholder = coalasce(_placheholder, "P");
     const fontSize = takeIf(isNaN(_size / 2), 24, _size / 2);
     const displayImage = takeIf(loaded, undefined, 'none');
 

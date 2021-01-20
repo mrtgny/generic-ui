@@ -16,6 +16,8 @@ const Tag = props => {
         onTextClick,
         closeIcon,
         onClear,
+        closeButtonClassName,
+        closeButtonStyle,
         children
     } = props
     const type = _type || "outlined";
@@ -50,8 +52,12 @@ const Tag = props => {
             <Show condition={onClear}>
                 <Button icon={closeIcon}
                         onClick={onClear}
-                        soft
-                        style={{color: 'white', marginLeft: 8}}
+                        className={closeButtonClassName}
+                        style={{
+                            color: 'white',
+                            marginLeft: 8,
+                            ...(closeButtonStyle || {})
+                        }}
                 />
             </Show>
         </div>

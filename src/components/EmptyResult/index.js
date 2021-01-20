@@ -2,7 +2,7 @@ import React from 'react';
 import appStyles from "../../utils/styles";
 
 const EmptyResult = props => {
-    const {icon, title, style, size: _size} = props;
+    const {icon, title, style, iconClassName, size: _size} = props;
     const size = _size || 120
     return (
         <div style={{...(style || {})}}>
@@ -10,7 +10,7 @@ const EmptyResult = props => {
                 width: '100%',
                 ...appStyles.centerInColumn,
             }}>
-                <div style={{...appStyles.center, ...appStyles.rounded(size)}}>
+                <div className={iconClassName} style={{...appStyles.center, ...appStyles.rounded(size)}}>
                     {icon}
                 </div>
             </div>

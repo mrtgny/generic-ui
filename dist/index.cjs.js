@@ -295,7 +295,6 @@ var appStyles = {
   },
   roundedImage: {
     width: '100%',
-    height: '100%',
     objectFit: "cover",
     borderRadius: "50%"
   }
@@ -322,7 +321,7 @@ var Image = function Image(props) {
     height: _size,
     borderRadius: '50%'
   }, {});
-  var placeholder = hooks.takeIf(_placheholder, "P");
+  var placeholder = hooks.coalasce(_placheholder, "P");
   var fontSize = hooks.takeIf(isNaN(_size / 2), 24, _size / 2);
   var displayImage = hooks.takeIf(loaded, undefined, 'none');
   var onLoad = React.useCallback(function () {
@@ -384,7 +383,9 @@ var Button = function Button(props) {
       justifyContent: 'center',
       alignItems: 'center',
       width: hooks.takeIf(iconButton, iconSize),
+      minWidth: hooks.takeIf(iconButton, iconSize),
       height: hooks.takeIf(iconButton, iconSize),
+      minHeight: hooks.takeIf(iconButton, iconSize),
       borderRadius: hooks.takeIf(iconButton, "50%")
     }, style || {}),
     type: htmlType,
@@ -444,6 +445,7 @@ var EmptyResult = function EmptyResult(props) {
   var icon = props.icon,
       title = props.title,
       style = props.style,
+      iconClassName = props.iconClassName,
       _size = props.size;
   var size = _size || 120;
   return /*#__PURE__*/React__default['default'].createElement("div", {
@@ -453,6 +455,7 @@ var EmptyResult = function EmptyResult(props) {
       width: '100%'
     }, appStyles.centerInColumn)
   }, /*#__PURE__*/React__default['default'].createElement("div", {
+    className: iconClassName,
     style: _objectSpread2(_objectSpread2({}, appStyles.center), appStyles.rounded(size))
   }, icon)), /*#__PURE__*/React__default['default'].createElement("div", null, /*#__PURE__*/React__default['default'].createElement("p", {
     style: {
@@ -658,9 +661,10 @@ var Card = function Card(props) {
       childrenContainerStyle = props.childrenContainerStyle,
       children = props.children;
   return /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2(_objectSpread2({}, style || {}), {}, {
-      borderRadius: 10
-    }),
+    style: _objectSpread2({
+      borderRadius: 10,
+      padding: 16
+    }, style || {}),
     className: className
   }, /*#__PURE__*/React__default['default'].createElement(hooks.Show, {
     condition: avatar || title || titleRenderer || description || subtitle
@@ -669,7 +673,8 @@ var Card = function Card(props) {
     title: title,
     titleRenderer: titleRenderer,
     style: _objectSpread2({
-      marginBottom: 4
+      margin: 0,
+      padding: 0
     }, titleContainerStyle || {}),
     titleContainerStyle: headerStyle,
     titleStyle: _objectSpread2({
@@ -970,6 +975,8 @@ var Tag = function Tag(props) {
       onTextClick = props.onTextClick,
       closeIcon = props.closeIcon,
       onClear = props.onClear,
+      closeButtonClassName = props.closeButtonClassName,
+      closeButtonStyle = props.closeButtonStyle,
       children = props.children;
   var type = _type || "outlined";
   var color = _color || (generatedColor ? hooks.generatedColorFromString(description) : "#cccccc");
@@ -998,11 +1005,11 @@ var Tag = function Tag(props) {
   }, /*#__PURE__*/React__default['default'].createElement(Button, {
     icon: closeIcon,
     onClick: onClear,
-    soft: true,
-    style: {
+    className: closeButtonClassName,
+    style: _objectSpread2({
       color: 'white',
       marginLeft: 8
-    }
+    }, closeButtonStyle || {})
   })));
 };
 
@@ -1061,6 +1068,7 @@ var TextListField = function TextListField(props) {
       listContainerStyle = props.listContainerStyle,
       _descriptionKey = props.descriptionKey,
       valuesRenderer = props.valuesRenderer,
+      textfieldClassName = props.textfieldClassName,
       label = props.label,
       checkIcon = props.checkIcon,
       valueTransformer = props.valueTransformer;
@@ -1126,6 +1134,7 @@ var TextListField = function TextListField(props) {
     },
     onPressEnter: onSave,
     onBlur: onSave,
+    className: textfieldClassName,
     suffix: /*#__PURE__*/React__default['default'].createElement(Button, {
       icon: checkIcon,
       type: "primary",

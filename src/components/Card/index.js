@@ -22,13 +22,13 @@ const Card = props => {
         children
     } = props;
     return (
-        <div style={{...(style || {}), borderRadius: 10}} className={className}>
+        <div style={{borderRadius: 10, padding: 16, ...(style || {})}} className={className}>
             <Show condition={avatar || title || titleRenderer || description || subtitle}>
                 <ListItem
                     avatar={avatar}
                     title={title}
                     titleRenderer={titleRenderer}
-                    style={{marginBottom: 4, ...(titleContainerStyle || {})}}
+                    style={{margin: 0, padding: 0, ...(titleContainerStyle || {})}}
                     titleContainerStyle={headerStyle}
                     titleStyle={{fontSize: 18, ...(titleStyle || {})}}
                     description={description}
