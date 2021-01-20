@@ -1,5 +1,5 @@
 import React from "react";
-import {Tooltip} from "antd";
+import Tooltip from "rc-tooltip";
 
 const ThreeDot = props => {
     const {children} = props;
@@ -11,7 +11,7 @@ const ThreeDot = props => {
             whiteSpace: 'nowrap',
             width: '100%'
         }}>
-            <Tooltip title={children}>
+            <Tooltip overlay={children}>
                 {children}
             </Tooltip>
         </div>

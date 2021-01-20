@@ -1,8 +1,8 @@
 import React from 'react';
 import {Mapper, takeIf} from "@reactivers/hooks";
-import {Badge} from "antd";
 import appStyles from "../../utils/styles";
 import Image from "../Image";
+import Badge from "../Badge";
 
 const OverflowImages = props => {
     const {images, maxCount: _maxCount, size} = props;
@@ -11,7 +11,7 @@ const OverflowImages = props => {
     const count = takeIf(overflowItemsCount > 0, `+${overflowItemsCount}`)
     return (
         <div style={{...appStyles.center, flexDirection: 'column', marginRight: 8}}>
-            <Badge count={count}>
+            <Badge title={count}>
                 <div style={{...appStyles.center}}>
                     <Mapper items={images.filter((_, index) => index < maxCount)}>
                         <OverflowImage size={size}/>

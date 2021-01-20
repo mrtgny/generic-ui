@@ -11,9 +11,8 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@reactivers/hooks": "file:/Users/muratguney/Desktop/JavaScript/reactivers-library/hooks",
-    "moment": "^2.29.1",
-    "react-color": "^2.19.3",
-    "antd": "^4.10.3"
+    "rc-tooltip": "^5.0.2",
+    "react-color": "^2.19.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
@@ -29,12 +28,12 @@
     "rollup-plugin-peer-deps-external": "^2.2.4"
   },
   "peerDependencies": {
-    "react-color": "^2.19.3",
-    "moment": "^2.29.1",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "antd": "^4.10.3",
-    "@reactivers/hooks": "file:/Users/muratguney/Desktop/JavaScript/reactivers-library/hooks"
+    "moment": "^2.29.1",
+    "history": "^5.0.0",
+    "react-router-dom": "^5.2.0",
+    "rc-tooltip": "^5.0.2",
+    "react-color": "^2.19.3"
   },
   "scripts": {
     "build": "rollup -c",

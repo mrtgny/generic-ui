@@ -1,7 +1,10 @@
-import React, { useState, useCallback, forwardRef, useEffect, useRef, useMemo } from 'react';
-import { takeIf, coalasce, Show, Mapper, useApi, useLocalStorage, generatedColorFromString, changeColor } from '@reactivers/hooks';
-import { Popover, Badge, Select, Tooltip } from 'antd';
+import React, { useEffect, cloneElement, useState, useCallback, useRef, useMemo } from 'react';
+import 'moment';
+import 'moment/locale/tr';
+import 'react-router-dom';
+import { createBrowserHistory } from 'history';
 import { SwatchesPicker } from 'react-color';
+import Tooltip from 'rc-tooltip';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -178,6 +181,290 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
+function _defineProperty$1(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys$1(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2$1(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys$1(Object(source), true).forEach(function (key) {
+        _defineProperty$1(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys$1(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+var mainColor = "#002171";
+var successColor = "green";
+var dangerColor = "#EF5350";
+var appURLs = {
+  HTTP_REST_SERVER: {
+    development: "http://localhost:8080/api",
+    production: "http://localhost:8080/api"
+  },
+  WS_REST_SERVER: {
+    development: "ws://localhost:8080/ws",
+    production: "ws://localhost:8080/ws"
+  }
+};
+var APP_NAMES = {
+  WS_REST_SERVER: "WS_REST_SERVER",
+  HTTP_REST_SERVER: "HTTP_REST_SERVER"
+};
+var getAppURLs = function getAppURLs() {
+  return appURLs;
+};
+var getAppNames = function getAppNames() {
+  return APP_NAMES;
+};
+
+var getAppURL = function getAppURL(appname) {
+  var NODE_ENV = process.env.NODE_ENV;
+  var appURLs = getAppURLs() || {};
+  return appURLs[appname][NODE_ENV];
+};
+
+var getMainColor = function getMainColor() {
+  return mainColor;
+};
+var getSuccessColor = function getSuccessColor() {
+  return successColor;
+};
+var getDangerColor = function getDangerColor() {
+  return dangerColor;
+};
+var constants = {
+  mainColor: getMainColor(),
+  successColor: getSuccessColor(),
+  mainDangerColor: getDangerColor(),
+  REST_SERVER: getAppURL(getAppNames().HTTP_REST_SERVER),
+  WS_SERVER: getAppURL(getAppNames().WS_REST_SERVER)
+};
+
+var trTRLocales = {
+  Stores: function Stores() {
+    return "Mağazalar";
+  },
+  Home: function Home() {
+    return "Ana Sayfa";
+  },
+  Purchases: function Purchases() {
+    return "Satın Alımlar";
+  },
+  Sales: function Sales() {
+    return "Satışlar";
+  },
+  Profile: function Profile() {
+    return "Profil";
+  },
+  Menu: function Menu() {
+    return "Menü";
+  },
+  Search: function Search() {
+    return "Ara";
+  },
+  Payment: function Payment() {
+    return "Ödeme";
+  },
+  Orders: function Orders() {
+    return "Siparişler";
+  },
+  Tables: function Tables() {
+    return "Masalar";
+  }
+};
+var languageKeys = ["tr"];
+
+var exportLocales = function exportLocales(languageKeys, languages) {
+  var exp = {};
+  languageKeys.forEach(function (i) {
+    exp[i] = languages;
+  });
+  return exp;
+};
+
+var TRLocales = exportLocales(languageKeys, trTRLocales);
+
+var enUSLocales = {
+  Stores: function Stores() {
+    return "Stores";
+  },
+  Home: function Home() {
+    return "Home";
+  }
+};
+var languageKeys$1 = ["en", "en-us"];
+
+var exportLocales$1 = function exportLocales(languageKeys, languages) {
+  var exp = {};
+  languageKeys.forEach(function (i) {
+    exp[i] = languages;
+  });
+  return exp;
+};
+
+var ENLocales = exportLocales$1(languageKeys$1, enUSLocales);
+
+var AllLocales = _objectSpread2$1(_objectSpread2$1({}, TRLocales), ENLocales);
+var hashCode = function hashCode(str) {
+  var hash = 0;
+
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  return hash;
+};
+var generatedColorFromString = function generatedColorFromString(_i) {
+  var i = hashCode(_i);
+  var c = (i & 0x00FFFFFF).toString(16).toUpperCase();
+  return "#" + "00000".substring(0, 6 - c.length) + c;
+};
+var changeColor = function changeColor(color, amt) {
+  var usePound = false;
+  var col = color + "";
+
+  if (col[0] === "#") {
+    col = col.slice(1);
+    usePound = true;
+  }
+
+  var num = parseInt(col, 16);
+  var r = (num >> 16) + amt;
+
+  if (r > 255) {
+    r = 255;
+  } else if (r < 0) {
+    r = 0;
+  }
+
+  var b = (num >> 8 & 0x00FF) + amt;
+
+  if (b > 255) {
+    b = 255;
+  } else if (b < 0) {
+    b = 0;
+  }
+
+  var g = (num & 0x0000FF) + amt;
+
+  if (g > 255) {
+    g = 255;
+  } else if (g < 0) {
+    g = 0;
+  }
+
+  return (usePound ? "#" : "") + (g | b << 8 | r << 16).toString(16);
+};
+var takeIf = function takeIf(condition, value) {
+  var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
+
+  if (condition) {
+    return value;
+  } else {
+    return defaultValue;
+  }
+};
+var isNullOrUndefined = function isNullOrUndefined(item) {
+  return item === null || item === undefined;
+};
+var coalasce = function coalasce(first, second) {
+  if (isNullOrUndefined(first)) return second;
+  return first;
+};
+var monthsNumberArray = Array(12).fill(0).map(function (_, index) {
+  return index % 12 + 1;
+});
+
+var authActions = {
+  SET_TOKEN: "set-token",
+  UPDATE_AUTH: "update-auth",
+  LOGIN: 'login',
+  LOGOUT: 'logout',
+  SIGNUP: 'signup'
+};
+var notificationActions = {
+  PUSH_IN_APP_NOTIFICATION: 'pushInAppNotification',
+  POP_IN_APP_NOTIFICATION: 'popInAppNotification'
+};
+var modalActions = {
+  SHOW_MODAL: 'show-modal',
+  HIDE_MODAL: 'hide-modal',
+  DELETE_MODAL: "delete-modal"
+};
+var lodaingActions = {
+  INCREASE_LOADING_QUEUE: 'increaseLoadingQueue',
+  DECREASE_LOADING_QUEUE: 'decreaseLoadingQueue'
+};
+var socketActions = {
+  ADD_MESSAGE_LISTENER: 'addMessageListener',
+  REMOVE_MESSAGE_LISTENER: 'removeMessageListener',
+  SET_SOCKET: 'setSocket'
+};
+
+var actions = _objectSpread2$1(_objectSpread2$1(_objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, authActions), notificationActions), modalActions), lodaingActions), socketActions);
+
+var history = createBrowserHistory();
+
+var Show = function Show(props) {
+  var condition = props.condition,
+      willUnmount = props.willUnmount,
+      children = props.children;
+  useEffect(function () {
+    return willUnmount;
+  }, [willUnmount]);
+  if (condition) return children;
+  return null;
+};
+
+var Mapper = function Mapper(props) {
+  var items = props.items,
+      map = props.map,
+      children = props.children;
+  if (children) return (items || []).map(function (item, index) {
+    return /*#__PURE__*/cloneElement(children, _objectSpread2$1(_objectSpread2$1({}, item), {}, {
+      key: index
+    }));
+  });
+  return (items || []).map(map);
+};
+
 var appStyles = {
   stretchRow: {
     display: 'flex',
@@ -352,6 +639,24 @@ var Image = function Image(props) {
   }, placeholder))));
 };
 
+var Badge = function Badge(props) {
+  var title = props.title,
+      children = props.children;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      borderRadius: 10,
+      backgroundColor: '#eee'
+    }
+  }, title), children);
+};
+
 var Button = function Button(props) {
   var style = props.style,
       icon = props.icon,
@@ -395,6 +700,70 @@ var Button = function Button(props) {
   }, icon)), /*#__PURE__*/React.createElement("div", null, children || title));
 };
 
+var styles = {
+  popover: {
+    position: 'absolute',
+    zIndex: '2'
+  },
+  cover: {
+    position: 'fixed',
+    top: '0px',
+    right: '0px',
+    bottom: '0px',
+    left: '0px',
+    zIndex: 1
+  }
+};
+
+var Popover = function Popover(props) {
+  var overlay = props.overlay,
+      children = props.children;
+  var target = useRef(null);
+
+  var _useState = useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      displayColorPicker = _useState2[0],
+      setDisplayColorPicker = _useState2[1];
+
+  var _useState3 = useState({
+    left: 0,
+    top: 0
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      position = _useState4[0],
+      setPosition = _useState4[1];
+
+  var showPopover = useCallback(function () {
+    setDisplayColorPicker(true);
+
+    if (target.current) {
+      var _ref = target.current.getBoundingClientRect() || {},
+          left = _ref.left,
+          top = _ref.top,
+          height = _ref.height;
+
+      setPosition({
+        left: left,
+        top: top + height
+      });
+    }
+  }, [target]);
+  var closePopover = useCallback(function () {
+    setDisplayColorPicker(false);
+  }, []);
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    onClick: showPopover,
+    ref: target
+  }, children), /*#__PURE__*/React.createElement(Show, {
+    condition: displayColorPicker
+  }, /*#__PURE__*/React.createElement("div", {
+    style: styles.cover,
+    onClick: closePopover
+  }, /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2(_objectSpread2({}, styles.popover), position)
+  }, overlay))));
+};
+
 var ColorPicker = function ColorPicker(props) {
   var label = props.label,
       _value = props.value,
@@ -409,11 +778,15 @@ var ColorPicker = function ColorPicker(props) {
     _onChange(hex);
   }, [_onChange]);
   return /*#__PURE__*/React.createElement(Popover, {
-    content: /*#__PURE__*/React.createElement(SwatchesPicker, {
+    overlay: /*#__PURE__*/React.createElement("div", {
+      style: {
+        backgroundColor: 'white',
+        padding: 16
+      }
+    }, /*#__PURE__*/React.createElement("h3", null, title || "Renk"), /*#__PURE__*/React.createElement(SwatchesPicker, {
       onChange: onChange
-    }),
-    title: title || "Renk"
-  }, /*#__PURE__*/React.createElement(Show, {
+    }))
+  }, /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Show, {
     condition: children
   }, children), /*#__PURE__*/React.createElement(Show, {
     condition: !children
@@ -430,7 +803,7 @@ var ColorPicker = function ColorPicker(props) {
       height: 32,
       width: '100%'
     }
-  }))));
+  })))));
 };
 
 var EmptyResult = function EmptyResult(props) {
@@ -606,7 +979,7 @@ var OverflowImages = function OverflowImages(props) {
       marginRight: 8
     })
   }, /*#__PURE__*/React.createElement(Badge, {
-    count: count
+    title: count
   }, /*#__PURE__*/React.createElement("div", {
     style: _objectSpread2({}, appStyles.center)
   }, /*#__PURE__*/React.createElement(Mapper, {
@@ -684,202 +1057,6 @@ var Card = function Card(props) {
     style: _objectSpread2({}, childrenContainerStyle || {})
   }, children))));
 };
-
-var Option = Select.Option;
-var QueryAutoComplete = /*#__PURE__*/forwardRef(function (props, ref) {
-  var value = props.value,
-      onChange = props.onChange,
-      getOptions = props.getOptions,
-      valueKey = props.valueKey,
-      labelKey = props.labelKey,
-      _minLength = props.minLength,
-      cache = props.cache,
-      rest = _objectWithoutProperties(props, ["value", "onChange", "getOptions", "valueKey", "labelKey", "minLength", "cache"]);
-
-  var minLength = _minLength === undefined ? 3 : _minLength;
-
-  var _useState = useState(value),
-      _useState2 = _slicedToArray(_useState, 2),
-      search = _useState2[0],
-      setSearch = _useState2[1];
-
-  var _useState3 = useState([]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      response = _useState4[0],
-      setResponse = _useState4[1];
-
-  var _useApi = useApi({
-    initialValue: []
-  }),
-      fetched = _useApi.fetched,
-      fetching = _useApi.fetching,
-      load = _useApi.load;
-
-  var _useLocalStorage = useLocalStorage("caches", "{}", true),
-      getCache = _useLocalStorage.getItem,
-      setCache = _useLocalStorage.setItem;
-
-  var searchStringLength = (search || "").length;
-  var shouldSearch = searchStringLength >= minLength;
-  useEffect(function () {
-    if (!search) {
-      setSearch(value);
-    }
-  }, [value, search, setSearch]);
-  useEffect(function () {
-    if (shouldSearch) {
-      var apiOptions = getOptions(search);
-
-      if (cache) {
-        var oldCaches = getCache();
-        var cacheValues = JSON.parse(oldCaches || "{}");
-        var cacheKey = JSON.stringify(apiOptions);
-        var existCache = cacheValues[cacheKey];
-
-        if (existCache) {
-          setResponse(existCache);
-        } else {
-          load(_objectSpread2(_objectSpread2({}, apiOptions), {}, {
-            onSuccess: function onSuccess(response) {
-              setCache(JSON.stringify(_objectSpread2(_objectSpread2({}, cacheValues), {}, _defineProperty({}, cacheKey, response))));
-              setResponse(response);
-            }
-          }));
-        }
-      } else {
-        load(_objectSpread2(_objectSpread2({}, apiOptions), {}, {
-          onSuccess: setResponse
-        }));
-      }
-    }
-  }, [shouldSearch, searchStringLength, getOptions, cache, search]);
-
-  var onSelect = function onSelect(e, option) {
-    onChange(e);
-  };
-
-  var getACOptions = function getACOptions() {
-    return (response || []).map(function (i) {
-      return {
-        value: i[valueKey],
-        label: i[labelKey]
-      };
-    });
-  };
-
-  var options = getACOptions();
-  return /*#__PURE__*/React.createElement(Select, _extends({}, rest, {
-    options: options,
-    showSearch: true,
-    value: value,
-    loading: fetching,
-    onSelect: onSelect,
-    ref: ref,
-    onSearch: setSearch,
-    optionFilterProp: "label",
-    defaultActiveFirstOption: true,
-    notFoundContent: fetched && !options.length ? "Bulunamadı" : null
-  }), options.map(function (option, index) {
-    return /*#__PURE__*/React.createElement(Option, {
-      key: index,
-      value: option.value
-    }, option.label);
-  }));
-});
-
-var Option$1 = Select.Option;
-var SelectItemsRenderer = /*#__PURE__*/forwardRef(function (props, ref) {
-  var items = props.items,
-      placeHolder = props.placeHolder,
-      value = props.value,
-      onChange = props.onChange,
-      onSearch = props.onSearch,
-      defaultSelectFirstValue = props.defaultSelectFirstValue,
-      mode = props.mode,
-      filterOption = props.filterOption,
-      _valueField = props.valueField,
-      labelInValue = props.labelInValue,
-      _descriptionField = props.descriptionField,
-      rest = _objectWithoutProperties(props, ["items", "placeHolder", "value", "onChange", "onSearch", "defaultSelectFirstValue", "mode", "filterOption", "valueField", "labelInValue", "descriptionField"]);
-
-  var valueField = _valueField || 'id';
-  var descriptionField = _descriptionField || 'name';
-  useEffect(function () {
-    if (defaultSelectFirstValue) {
-      if (items.length && !value) {
-        onChange(items[0][valueField]);
-      }
-    }
-  }, [defaultSelectFirstValue, items, valueField, value]);
-
-  var getValue = function getValue() {
-    if (labelInValue) {
-      if (mode === "multiple") return (value || []).map(function (i) {
-        return {
-          value: i.value || i[valueField],
-          label: i.label || i[descriptionField],
-          key: i.key || i[valueField]
-        };
-      });
-      return {
-        value: value[valueField],
-        label: value[descriptionField]
-      };
-    }
-
-    return value;
-  };
-
-  return /*#__PURE__*/React.createElement(Select, _extends({}, rest, {
-    mode: mode,
-    labelInValue: labelInValue,
-    value: getValue(),
-    ref: ref,
-    showSearch: true,
-    placeholder: placeHolder,
-    optionFilterProp: "children",
-    onChange: onChange,
-    onSearch: onSearch
-  }), (items || []).map(function (item, index) {
-    return /*#__PURE__*/React.createElement(Option$1, {
-      key: index,
-      value: item[valueField]
-    }, item[descriptionField]);
-  }));
-});
-
-var QuerySelect = /*#__PURE__*/forwardRef(function (props, ref) {
-  var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      items = _useState2[0],
-      setItems = _useState2[1];
-
-  var url = props.url,
-      options = props.options,
-      rest = _objectWithoutProperties(props, ["url", "options"]);
-
-  var _useApi = useApi(),
-      fetched = _useApi.fetched,
-      load = _useApi.load,
-      response = _useApi.response;
-
-  useEffect(function () {
-    if (url) {
-      load(_objectSpread2({
-        endpoint: url
-      }, options));
-    }
-  }, [url, load, options]);
-  useEffect(function () {
-    if (fetched && response) {
-      setItems(response.data);
-    }
-  }, [fetched, response]);
-  return /*#__PURE__*/React.createElement(SelectItemsRenderer, _extends({
-    items: items,
-    ref: ref
-  }, rest));
-});
 
 var Rate = function Rate(props) {
   var value = props.value,
@@ -1213,8 +1390,8 @@ var ThreeDot = function ThreeDot(props) {
       width: '100%'
     }
   }, /*#__PURE__*/React.createElement(Tooltip, {
-    title: children
+    overlay: children
   }, children));
 };
 
-export { Button, Card, ColorPicker, EmptyResult, Header, Image, IncDecField, ListItem, OverflowImages, QueryAutoComplete, QuerySelect, Rate, Section, Selectfield, Tag, TextListField, Textfield, ThreeDot, appStyles };
+export { Badge, Button, Card, ColorPicker, EmptyResult, Header, Image, IncDecField, ListItem, OverflowImages, Rate, Section, Selectfield, Tag, TextListField, Textfield, ThreeDot, appStyles };

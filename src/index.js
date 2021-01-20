@@ -1,4 +1,5 @@
 export {default as Image} from './components/Image';
+export {default as Badge} from './components/Badge';
 export {default as Button} from './components/Button';
 export {default as ColorPicker} from './components/ColorPicker';
 export {default as EmptyResult} from './components/EmptyResult';
@@ -7,8 +8,6 @@ export {default as IncDecField} from './components/IncDecField';
 export {default as ListItem} from './components/ListItem';
 export {default as OverflowImages} from './components/OverflowImages';
 export {default as Card} from './components/Card';
-export {default as QueryAutoComplete} from './components/QueryAutoComplete';
-export {default as QuerySelect} from './components/QuerySelect';
 export {default as Rate} from './components/Rate';
 export {default as Section} from './components/Section';
 export {default as Selectfield} from './components/Selectfield';
@@ -16,4 +15,4 @@ export {default as Tag} from './components/Tag';
 export {default as Textfield} from './components/Textfield';
 export {default as TextListField} from './components/TextListField';
 export {default as ThreeDot} from './components/ThreeDot';
-export {default as appStyles}  from './utils/styles'
+export {default as appStyles} from './utils/styles'
