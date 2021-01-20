@@ -1068,7 +1068,8 @@ var TextListField = function TextListField(props) {
       listContainerStyle = props.listContainerStyle,
       _descriptionKey = props.descriptionKey,
       valuesRenderer = props.valuesRenderer,
-      textfieldClassName = props.textfieldClassName,
+      textfieldContainerClassName = props.textfieldContainerClassName,
+      checkButton = props.checkButton,
       label = props.label,
       checkIcon = props.checkIcon,
       valueTransformer = props.valueTransformer;
@@ -1111,6 +1112,15 @@ var TextListField = function TextListField(props) {
 
     _onChange(_toConsumableArray(values));
   }, [values, valueTransformer, _onChange]);
+  var suffix = hooks.takeIf(checkButton, checkButton({
+    disabled: !value[descriptionKey],
+    onClick: onSave
+  }), /*#__PURE__*/React__default['default'].createElement(Button, {
+    icon: checkIcon,
+    type: "primary",
+    disabled: !value[descriptionKey],
+    onClick: onSave
+  }));
   return /*#__PURE__*/React__default['default'].createElement(React__default['default'].Fragment, null, /*#__PURE__*/React__default['default'].createElement("div", {
     style: _objectSpread2(_objectSpread2({}, appStyles.grid), listContainerStyle || {})
   }, values.map(function (item, index) {
@@ -1128,19 +1138,14 @@ var TextListField = function TextListField(props) {
     })
   }, /*#__PURE__*/React__default['default'].createElement(Textfield, {
     value: value[descriptionKey],
+    containerClassName: textfieldContainerClassName,
     label: label,
     onChange: function onChange(e) {
       return setValue(_objectSpread2(_objectSpread2({}, value), {}, _defineProperty({}, descriptionKey, e.target.value)));
     },
     onPressEnter: onSave,
     onBlur: onSave,
-    className: textfieldClassName,
-    suffix: /*#__PURE__*/React__default['default'].createElement(Button, {
-      icon: checkIcon,
-      type: "primary",
-      disabled: !value[descriptionKey],
-      onClick: onSave
-    })
+    suffix: suffix
   })));
 };
 

@@ -2,6 +2,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import Textfield from "../Textfield";
 import Button from "../Button";
 import appStyles from "../../utils/styles";
+import {takeIf} from "@reactivers/hooks";
 
 const TextListField = props => {
     const {
@@ -10,7 +11,8 @@ const TextListField = props => {
         listContainerStyle,
         descriptionKey: _descriptionKey,
         valuesRenderer,
-        textfieldClassName,
+        textfieldContainerClassName,
+        checkButton,
         label,
         checkIcon,
         valueTransformer
@@ -46,6 +48,14 @@ const TextListField = props => {
         _onChange([...values])
     }, [values, valueTransformer, _onChange])
 
+
+    const suffix = takeIf(checkButton, checkButton({disabled: !value[descriptionKey], onClick: onSave}), <Button
+        icon={checkIcon}
+        type="primary"
+        disabled={!value[descriptionKey]}
+        onClick={onSave}
+    />)
+
     return (
         <>
             <div style={{...appStyles.grid, ...(listContainerStyle || {})}}>
@@ -60,18 +70,12 @@ const TextListField = props => {
             </div>
             <div style={{...appStyles.row, marginTop: 8}}>
                 <Textfield value={value[descriptionKey]}
+                           containerClassName={textfieldContainerClassName}
                            label={label}
                            onChange={e => setValue({...value, [descriptionKey]: e.target.value})}
                            onPressEnter={onSave}
                            onBlur={onSave}
-                           className={textfieldClassName}
-                           suffix={
-                               <Button icon={checkIcon}
-                                       type="primary"
-                                       disabled={!value[descriptionKey]}
-                                       onClick={onSave}
-                               />
-                           }
+                           suffix={suffix}
                 />
             </div>
         </>
