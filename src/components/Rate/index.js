@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Show} from "@reactivers/hooks";
 import appStyles from "../../utils/styles";
+import Show from "../Show";
 
 const Rate = props => {
     const {value, total, size: _size, style} = props;

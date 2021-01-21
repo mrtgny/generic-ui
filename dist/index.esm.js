@@ -1,9 +1,28 @@
-import React, { useEffect, cloneElement, useState, useCallback, useRef, useMemo } from 'react';
-import 'moment';
-import 'moment/locale/tr';
-import 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import React, { useEffect, useCallback, useRef, useState, cloneElement, forwardRef, useImperativeHandle, useMemo } from 'react';
+import { coalasce, takeIf, useApi, useHistory, generatedColorFromString, changeColor } from '@reactivers/hooks';
 import { SwatchesPicker } from 'react-color';
+import { Field as Field$1 } from 'rc-field-form';
+export { default as Form, useForm } from 'rc-field-form';
+import 'rc-notification/assets/index.css';
+import Notification from 'rc-notification';
+
+var Badge = function Badge(props) {
+  var title = props.title,
+      children = props.children;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      borderRadius: 10,
+      backgroundColor: '#eee'
+    }
+  }, title), children);
+};
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -180,267 +199,6 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-function _defineProperty$1(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function ownKeys$1(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2$1(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys$1(Object(source), true).forEach(function (key) {
-        _defineProperty$1(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys$1(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-var mainColor = "#002171";
-var successColor = "green";
-var dangerColor = "#EF5350";
-var appURLs = {
-  HTTP_REST_SERVER: {
-    development: "http://localhost:8080/api",
-    production: "http://localhost:8080/api"
-  },
-  WS_REST_SERVER: {
-    development: "ws://localhost:8080/ws",
-    production: "ws://localhost:8080/ws"
-  }
-};
-var APP_NAMES = {
-  WS_REST_SERVER: "WS_REST_SERVER",
-  HTTP_REST_SERVER: "HTTP_REST_SERVER"
-};
-var getAppURLs = function getAppURLs() {
-  return appURLs;
-};
-var getAppNames = function getAppNames() {
-  return APP_NAMES;
-};
-
-var getAppURL = function getAppURL(appname) {
-  var NODE_ENV = process.env.NODE_ENV;
-  var appURLs = getAppURLs() || {};
-  return appURLs[appname][NODE_ENV];
-};
-
-var getMainColor = function getMainColor() {
-  return mainColor;
-};
-var getSuccessColor = function getSuccessColor() {
-  return successColor;
-};
-var getDangerColor = function getDangerColor() {
-  return dangerColor;
-};
-var constants = {
-  mainColor: getMainColor(),
-  successColor: getSuccessColor(),
-  mainDangerColor: getDangerColor(),
-  REST_SERVER: getAppURL(getAppNames().HTTP_REST_SERVER),
-  WS_SERVER: getAppURL(getAppNames().WS_REST_SERVER)
-};
-
-var trTRLocales = {
-  Stores: function Stores() {
-    return "Mağazalar";
-  },
-  Home: function Home() {
-    return "Ana Sayfa";
-  },
-  Purchases: function Purchases() {
-    return "Satın Alımlar";
-  },
-  Sales: function Sales() {
-    return "Satışlar";
-  },
-  Profile: function Profile() {
-    return "Profil";
-  },
-  Menu: function Menu() {
-    return "Menü";
-  },
-  Search: function Search() {
-    return "Ara";
-  },
-  Payment: function Payment() {
-    return "Ödeme";
-  },
-  Orders: function Orders() {
-    return "Siparişler";
-  },
-  Tables: function Tables() {
-    return "Masalar";
-  }
-};
-var languageKeys = ["tr"];
-
-var exportLocales = function exportLocales(languageKeys, languages) {
-  var exp = {};
-  languageKeys.forEach(function (i) {
-    exp[i] = languages;
-  });
-  return exp;
-};
-
-var TRLocales = exportLocales(languageKeys, trTRLocales);
-
-var enUSLocales = {
-  Stores: function Stores() {
-    return "Stores";
-  },
-  Home: function Home() {
-    return "Home";
-  }
-};
-var languageKeys$1 = ["en", "en-us"];
-
-var exportLocales$1 = function exportLocales(languageKeys, languages) {
-  var exp = {};
-  languageKeys.forEach(function (i) {
-    exp[i] = languages;
-  });
-  return exp;
-};
-
-var ENLocales = exportLocales$1(languageKeys$1, enUSLocales);
-
-var AllLocales = _objectSpread2$1(_objectSpread2$1({}, TRLocales), ENLocales);
-var hashCode = function hashCode(str) {
-  var hash = 0;
-
-  for (var i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  return hash;
-};
-var generatedColorFromString = function generatedColorFromString(_i) {
-  var i = hashCode(_i);
-  var c = (i & 0x00FFFFFF).toString(16).toUpperCase();
-  return "#" + "00000".substring(0, 6 - c.length) + c;
-};
-var changeColor = function changeColor(color, amt) {
-  var usePound = false;
-  var col = color + "";
-
-  if (col[0] === "#") {
-    col = col.slice(1);
-    usePound = true;
-  }
-
-  var num = parseInt(col, 16);
-  var r = (num >> 16) + amt;
-
-  if (r > 255) {
-    r = 255;
-  } else if (r < 0) {
-    r = 0;
-  }
-
-  var b = (num >> 8 & 0x00FF) + amt;
-
-  if (b > 255) {
-    b = 255;
-  } else if (b < 0) {
-    b = 0;
-  }
-
-  var g = (num & 0x0000FF) + amt;
-
-  if (g > 255) {
-    g = 255;
-  } else if (g < 0) {
-    g = 0;
-  }
-
-  return (usePound ? "#" : "") + (g | b << 8 | r << 16).toString(16);
-};
-var takeIf = function takeIf(condition, value) {
-  var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
-
-  if (condition) {
-    return value;
-  } else {
-    return defaultValue;
-  }
-};
-var isNullOrUndefined = function isNullOrUndefined(item) {
-  return item === null || item === undefined;
-};
-var coalasce = function coalasce(first, second) {
-  if (isNullOrUndefined(first)) return second;
-  return first;
-};
-var monthsNumberArray = Array(12).fill(0).map(function (_, index) {
-  return index % 12 + 1;
-});
-
-var authActions = {
-  SET_TOKEN: "set-token",
-  UPDATE_AUTH: "update-auth",
-  LOGIN: 'login',
-  LOGOUT: 'logout',
-  SIGNUP: 'signup'
-};
-var notificationActions = {
-  PUSH_IN_APP_NOTIFICATION: 'pushInAppNotification',
-  POP_IN_APP_NOTIFICATION: 'popInAppNotification'
-};
-var modalActions = {
-  SHOW_MODAL: 'show-modal',
-  HIDE_MODAL: 'hide-modal',
-  DELETE_MODAL: "delete-modal"
-};
-var lodaingActions = {
-  INCREASE_LOADING_QUEUE: 'increaseLoadingQueue',
-  DECREASE_LOADING_QUEUE: 'decreaseLoadingQueue'
-};
-var socketActions = {
-  ADD_MESSAGE_LISTENER: 'addMessageListener',
-  REMOVE_MESSAGE_LISTENER: 'removeMessageListener',
-  SET_SOCKET: 'setSocket'
-};
-
-var actions = _objectSpread2$1(_objectSpread2$1(_objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, authActions), notificationActions), modalActions), lodaingActions), socketActions);
-
-var history = createBrowserHistory();
-
 var Show = function Show(props) {
   var condition = props.condition,
       willUnmount = props.willUnmount,
@@ -450,18 +208,6 @@ var Show = function Show(props) {
   }, [willUnmount]);
   if (condition) return children;
   return null;
-};
-
-var Mapper = function Mapper(props) {
-  var items = props.items,
-      map = props.map,
-      children = props.children;
-  if (children) return (items || []).map(function (item, index) {
-    return /*#__PURE__*/cloneElement(children, _objectSpread2$1(_objectSpread2$1({}, item), {}, {
-      key: index
-    }));
-  });
-  return (items || []).map(map);
 };
 
 var appStyles = {
@@ -591,84 +337,6 @@ var appStyles = {
   }
 };
 
-var Image = function Image(props) {
-  var style = props.style,
-      className = props.className,
-      hidePlaceholder = props.hidePlaceholder,
-      src = props.src,
-      alt = props.alt,
-      _onLoad = props.onLoad,
-      _placheholder = props.placeholder,
-      _size = props.size,
-      rest = _objectWithoutProperties(props, ["style", "className", "hidePlaceholder", "src", "alt", "onLoad", "placeholder", "size"]);
-
-  var _useState = useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      loaded = _useState2[0],
-      setLoaded = _useState2[1];
-
-  var size = takeIf(_size, {
-    width: _size,
-    height: _size,
-    borderRadius: '50%'
-  }, {});
-  var placeholder = coalasce(_placheholder, "P");
-  var fontSize = takeIf(isNaN(_size / 2), 24, _size / 2);
-  var displayImage = takeIf(loaded, undefined, 'none');
-  var onLoad = useCallback(function () {
-    setLoaded(true);
-    if (_onLoad) _onLoad();
-  }, [_onLoad]);
-  return /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({}, size), appStyles.defaultShadow), appStyles.center), {}, {
-      backgroundColor: "#eee",
-      overflow: "hidden"
-    }, style),
-    className: className
-  }, /*#__PURE__*/React.createElement(Show, {
-    condition: src
-  }, /*#__PURE__*/React.createElement("img", _extends({
-    onLoad: onLoad,
-    src: src,
-    alt: alt,
-    style: _objectSpread2(_objectSpread2(_objectSpread2({}, appStyles.roundedImage), style), {}, {
-      display: displayImage
-    })
-  }, rest))), /*#__PURE__*/React.createElement(Show, {
-    condition: !loaded && !hidePlaceholder
-  }, /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2({
-      width: '100%',
-      height: '100%'
-    }, appStyles.center)
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: 0,
-      fontSize: fontSize,
-      fontWeight: 'bold',
-      padding: 4
-    }
-  }, placeholder))));
-};
-
-var Badge = function Badge(props) {
-  var title = props.title,
-      children = props.children;
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'relative'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      right: 0,
-      top: 0,
-      borderRadius: 10,
-      backgroundColor: '#eee'
-    }
-  }, title), children);
-};
-
 var Button = function Button(props) {
   var style = props.style,
       icon = props.icon,
@@ -710,6 +378,127 @@ var Button = function Button(props) {
       height: takeIf(iconButton, "100%", 12)
     }, appStyles.center)
   }, icon)), /*#__PURE__*/React.createElement("div", null, children || title));
+};
+
+var ListItem = function ListItem(props) {
+  var style = props.style,
+      avatar = props.avatar,
+      title = props.title,
+      lastItem = props.lastItem,
+      titleRenderer = props.titleRenderer,
+      description = props.description,
+      className = props.className,
+      titleStyle = props.titleStyle,
+      subtitleStyle = props.subtitleStyle,
+      titleContainerStyle = props.titleContainerStyle,
+      onClick = props.onClick,
+      onTitleClick = props.onTitleClick,
+      subtitle = props.subtitle,
+      subtitleRenderer = props.subtitleRenderer,
+      headerContainerStyle = props.headerContainerStyle,
+      avatarContainerStyle = props.avatarContainerStyle,
+      selected = props.selected,
+      children = props.children;
+  var borderBottom = takeIf(lastItem, '1px solid #eee');
+  var titleContainerClassName = takeIf(onTitleClick, "clickable", "");
+  return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      borderBottom: borderBottom,
+      padding: 4
+    }, style || {}),
+    className: className,
+    onClick: onClick
+  }, /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      display: "flex",
+      alignItems: 'center'
+    }, headerContainerStyle || {})
+  }, /*#__PURE__*/React.createElement(Show, {
+    condition: avatar
+  }, /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      display: 'flex',
+      justifyContent: 'center',
+      marginRight: takeIf(!!title || !!titleRenderer, 8, 0)
+    }, avatarContainerStyle || {})
+  }, avatar)), /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      width: '100%',
+      padding: 4
+    }, titleContainerStyle || {}),
+    onClick: onTitleClick,
+    className: titleContainerClassName
+  }, /*#__PURE__*/React.createElement(Show, {
+    condition: titleRenderer
+  }, titleRenderer), /*#__PURE__*/React.createElement(Show, {
+    condition: title
+  }, /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      margin: 0,
+      color: takeIf(selected, "#1890ff")
+    }, titleStyle || {})
+  }, title)), /*#__PURE__*/React.createElement(Show, {
+    condition: subtitle
+  }, /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      margin: 0,
+      fontSize: 10,
+      color: 'black'
+    }, subtitleStyle || {})
+  }, subtitle)), /*#__PURE__*/React.createElement(Show, {
+    condition: subtitleRenderer
+  }, subtitleRenderer)), /*#__PURE__*/React.createElement(Show, {
+    condition: description
+  }, description)), children);
+};
+
+var Card = function Card(props) {
+  var style = props.style,
+      avatar = props.avatar,
+      title = props.title,
+      titleRenderer = props.titleRenderer,
+      titleStyle = props.titleStyle,
+      headerStyle = props.headerStyle,
+      titleContainerStyle = props.titleContainerStyle,
+      description = props.description,
+      onHeaderClick = props.onHeaderClick,
+      subtitle = props.subtitle,
+      onTitleClick = props.onTitleClick,
+      className = props.className,
+      cardStyle = props.cardStyle,
+      childrenContainerStyle = props.childrenContainerStyle,
+      children = props.children;
+  return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      borderRadius: 10,
+      padding: 16
+    }, style || {}),
+    className: className
+  }, /*#__PURE__*/React.createElement(Show, {
+    condition: avatar || title || titleRenderer || description || subtitle
+  }, /*#__PURE__*/React.createElement(ListItem, {
+    avatar: avatar,
+    title: title,
+    titleRenderer: titleRenderer,
+    style: _objectSpread2({
+      margin: 0,
+      padding: 0
+    }, titleContainerStyle || {}),
+    titleContainerStyle: headerStyle,
+    titleStyle: _objectSpread2({
+      fontSize: 18
+    }, titleStyle || {}),
+    description: description,
+    subtitle: subtitle,
+    onTitleClick: onTitleClick,
+    onClick: onHeaderClick
+  })), /*#__PURE__*/React.createElement(Show, {
+    condition: children
+  }, /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2(_objectSpread2({}, appStyles.card), cardStyle || {})
+  }, /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({}, childrenContainerStyle || {})
+  }, children))));
 };
 
 var styles = {
@@ -893,6 +682,62 @@ var EmptyResult = function EmptyResult(props) {
   }, title)));
 };
 
+var FadeAnimation = function FadeAnimation(props) {
+  var style = props.style,
+      _type = props.type,
+      _duration = props.duration,
+      _delay = props.delay,
+      onAnimationComplete = props.onAnimationComplete,
+      children = props.children;
+  var duration = _duration || 100;
+  var delay = _delay || 0;
+  var type = _type || "in";
+
+  var _useState = useState(type === "in" ? 0 : 1),
+      _useState2 = _slicedToArray(_useState, 2),
+      opacity = _useState2[0],
+      setOpacity = _useState2[1];
+
+  var toValue = type === "in" ? 1 : 0;
+  useEffect(function () {
+    if (opacity === toValue && onAnimationComplete) {
+      setTimeout(function () {
+        onAnimationComplete();
+      }, duration + delay);
+    }
+  }, [opacity]);
+  useEffect(function () {
+    if (type === "in") {
+      setOpacity(toValue);
+    } else {
+      setOpacity(toValue);
+    }
+  }, [type]);
+  return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      opacity: opacity,
+      transition: "".concat(duration),
+      transitionDelay: delay
+    }, style || {})
+  }, children);
+};
+
+var Field = function Field(props) {
+  var style = props.style,
+      name = props.name,
+      children = props.children;
+  return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      width: '100%',
+      margin: '16px 0'
+    }, style || {})
+  }, /*#__PURE__*/React.createElement(Show, {
+    condition: name
+  }, /*#__PURE__*/React.createElement(Field$1, props)), /*#__PURE__*/React.createElement(Show, {
+    condition: !name
+  }, children));
+};
+
 var Header = function Header(props) {
   var title = props.title,
       titleRenderer = props.titleRenderer,
@@ -915,6 +760,66 @@ var Header = function Header(props) {
       margin: 0
     }, appStyles.cardTitle)
   }, title))), rightContent);
+};
+
+var Image = function Image(props) {
+  var style = props.style,
+      className = props.className,
+      hidePlaceholder = props.hidePlaceholder,
+      src = props.src,
+      alt = props.alt,
+      _onLoad = props.onLoad,
+      _placheholder = props.placeholder,
+      _size = props.size,
+      rest = _objectWithoutProperties(props, ["style", "className", "hidePlaceholder", "src", "alt", "onLoad", "placeholder", "size"]);
+
+  var _useState = useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      loaded = _useState2[0],
+      setLoaded = _useState2[1];
+
+  var size = takeIf(_size, {
+    width: _size,
+    height: _size,
+    borderRadius: '50%'
+  }, {});
+  var placeholder = coalasce(_placheholder, "P");
+  var fontSize = takeIf(isNaN(_size / 2), 24, _size / 2);
+  var displayImage = takeIf(loaded, undefined, 'none');
+  var onLoad = useCallback(function () {
+    setLoaded(true);
+    if (_onLoad) _onLoad();
+  }, [_onLoad]);
+  return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({}, size), appStyles.defaultShadow), appStyles.center), {}, {
+      backgroundColor: "#eee",
+      overflow: "hidden"
+    }, style),
+    className: className
+  }, /*#__PURE__*/React.createElement(Show, {
+    condition: src
+  }, /*#__PURE__*/React.createElement("img", _extends({
+    onLoad: onLoad,
+    src: src,
+    alt: alt,
+    style: _objectSpread2(_objectSpread2(_objectSpread2({}, appStyles.roundedImage), style), {}, {
+      display: displayImage
+    })
+  }, rest))), /*#__PURE__*/React.createElement(Show, {
+    condition: !loaded && !hidePlaceholder
+  }, /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread2({
+      width: '100%',
+      height: '100%'
+    }, appStyles.center)
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: 0,
+      fontSize: fontSize,
+      fontWeight: 'bold',
+      padding: 4
+    }
+  }, placeholder))));
 };
 
 var IncDecField = function IncDecField(props) {
@@ -954,76 +859,281 @@ var IncDecField = function IncDecField(props) {
   }));
 };
 
-var ListItem = function ListItem(props) {
-  var style = props.style,
-      avatar = props.avatar,
-      title = props.title,
-      lastItem = props.lastItem,
-      titleRenderer = props.titleRenderer,
-      description = props.description,
-      className = props.className,
-      titleStyle = props.titleStyle,
-      subtitleStyle = props.subtitleStyle,
-      titleContainerStyle = props.titleContainerStyle,
-      onClick = props.onClick,
-      onTitleClick = props.onTitleClick,
-      subtitle = props.subtitle,
-      subtitleRenderer = props.subtitleRenderer,
-      headerContainerStyle = props.headerContainerStyle,
-      selected = props.selected,
+var Mapper = function Mapper(props) {
+  var items = props.items,
+      map = props.map,
       children = props.children;
-  var borderBottom = takeIf(lastItem, '1px solid #eee');
-  var titleContainerClassName = takeIf(onTitleClick, "clickable", "");
+  if (children) return (items || []).map(function (item, index) {
+    return /*#__PURE__*/cloneElement(children, _objectSpread2(_objectSpread2({}, item), {}, {
+      key: index
+    }));
+  });
+  return (items || []).map(map);
+};
+
+var InfiniteScrollView = /*#__PURE__*/forwardRef(function (props, ref) {
+  var style = props.style,
+      endpoint = props.endpoint,
+      _apiOptions = props.apiOptions,
+      shimmer = props.shimmer,
+      onDataChange = props.onDataChange,
+      render = props.render,
+      _pageSize = props.pageSize,
+      empty = props.empty,
+      reload = props.reload,
+      filterOptions = props.filterOptions,
+      onReload = props.onReload,
+      loadingRenderer = props.loadingRenderer;
+  var apiOptions = _apiOptions || {};
+  var method = apiOptions.method,
+      params = apiOptions.params,
+      apiOptionsOnSuccess = apiOptions.onSuccess;
+  var pageSize = _pageSize || 5;
+
+  var _useState = useState(1),
+      _useState2 = _slicedToArray(_useState, 2),
+      page = _useState2[0],
+      setPage = _useState2[1];
+
+  var _useState3 = useState([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      data = _useState4[0],
+      setData = _useState4[1];
+
+  var _useState5 = useState({}),
+      _useState6 = _slicedToArray(_useState5, 2),
+      filter = _useState6[0],
+      setFilter = _useState6[1];
+
+  var reloaderRef = useRef(null);
+
+  var updateDataByIndex = function updateDataByIndex(index, item) {
+    setData(function (oldData) {
+      oldData[index] = item;
+      return oldData;
+    });
+  };
+
+  useImperativeHandle(ref, function () {
+    return {
+      updateDataByIndex: updateDataByIndex
+    };
+  });
+  var containerView = useRef(null);
+
+  var onSuccess = function onSuccess(response) {
+    if (apiOptionsOnSuccess) {
+      apiOptionsOnSuccess(response);
+    }
+
+    setData(function (oldData) {
+      var newData = response.data.currentPage === 1 ? response.data.results || [] : [].concat(_toConsumableArray(oldData), _toConsumableArray(response.data.results || []));
+      if (onDataChange) onDataChange(newData);
+      return newData;
+    });
+  };
+
+  var _useApi = useApi({
+    onSuccess: onSuccess
+  }),
+      fetched = _useApi.fetched,
+      firstTimeFetched = _useApi.firstTimeFetched,
+      apiLoad = _useApi.load,
+      response = _useApi.response;
+
+  var _ref = response.data || {},
+      pageCount = _ref.pageCount;
+
+  var hasNextPage = (page || 1) < (pageCount || 2);
+  var load = useCallback(function () {
+    var hasNextPage = (page || 1) <= (pageCount || 2);
+    if (!hasNextPage) return;
+
+    var _endpoint = "".concat(endpoint, "/").concat(page, "/").concat(pageSize);
+
+    var _method = method || (filterOptions ? "POST" : "GET");
+
+    var _params = params || (filterOptions ? filter : undefined);
+
+    apiLoad({
+      endpoint: _endpoint,
+      method: _method,
+      params: _params
+    });
+  }, [page, pageCount, endpoint, pageSize, method, params, filterOptions, apiLoad, filter]);
+  var nextPage = useCallback(function () {
+    if (fetched && hasNextPage) {
+      setPage(function (oldPage) {
+        return oldPage + 1;
+      });
+    }
+  }, [fetched, hasNextPage]);
+  var onRefresh = useCallback(function () {
+    if (page === 1) {
+      load();
+    } else {
+      setPage(1);
+    }
+  }, [load, page]);
+  var shouldFetchNextPage = useCallback(function () {
+    if (!reloaderRef.current) return false;
+    var reloaderRects = reloaderRef.current.getClientRects();
+    var reloaderOffsetY = reloaderRects[0].top;
+    var shouldFetch = reloaderOffsetY - 20 <= window.innerHeight;
+    return shouldFetch;
+  }, [reloaderRef]);
+  var onScroll = useCallback(function (event) {
+    if (shouldFetchNextPage()) {
+      nextPage();
+    }
+  }, [shouldFetchNextPage, nextPage]);
+  useEffect(function () {
+    if (shouldFetchNextPage()) nextPage();
+  }, [shouldFetchNextPage, nextPage]);
+  useEffect(function () {
+    load();
+  }, [load]);
+  useEffect(function () {
+    var appLayout = document.getElementsByTagName("body")[0];
+    appLayout.onscroll = onScroll;
+  }, [onScroll]);
+  useEffect(function () {
+    if (reload) {
+      onRefresh();
+      onReload();
+    }
+  }, [onRefresh, onReload, reload]);
+
+  if (!firstTimeFetched) {
+    return shimmer ? /*#__PURE__*/React.createElement(props.shimmer, null) : /*#__PURE__*/React.createElement(props.loadingRenderer, null);
+  }
+
+  var hasData = !!data.length;
   return /*#__PURE__*/React.createElement("div", {
     style: _objectSpread2({
-      borderBottom: borderBottom,
-      padding: 4
+      padding: 16
     }, style || {}),
-    className: className,
-    onClick: onClick
-  }, /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2({
-      display: "flex",
-      alignItems: 'center'
-    }, headerContainerStyle || {})
+    ref: containerView
   }, /*#__PURE__*/React.createElement(Show, {
-    condition: avatar
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginRight: takeIf(!!title || !!titleRenderer, 8, 0)
+    condition: hasData
+  }, /*#__PURE__*/React.createElement(Mapper, {
+    items: data,
+    map: function map(item, index) {
+      return render(item, index, {
+        page: page,
+        pageSize: pageSize
+      });
     }
-  }, avatar)), /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2({
-      width: '100%',
-      padding: 4
-    }, titleContainerStyle || {}),
-    onClick: onTitleClick,
-    className: titleContainerClassName
+  }), /*#__PURE__*/React.createElement(Show, {
+    condition: hasNextPage
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: reloaderRef
   }, /*#__PURE__*/React.createElement(Show, {
-    condition: titleRenderer
-  }, titleRenderer), /*#__PURE__*/React.createElement(Show, {
-    condition: title
-  }, /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2({
-      margin: 0,
-      color: takeIf(selected, "#1890ff")
-    }, titleStyle || {})
-  }, title)), /*#__PURE__*/React.createElement(Show, {
-    condition: subtitle
-  }, /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2({
-      margin: 0,
-      fontSize: 10,
-      color: 'black'
-    }, subtitleStyle || {})
-  }, subtitle)), /*#__PURE__*/React.createElement(Show, {
-    condition: subtitleRenderer
-  }, subtitleRenderer)), /*#__PURE__*/React.createElement(Show, {
-    condition: description
-  }, description)), children);
+    condition: shimmer
+  }, /*#__PURE__*/React.createElement(props.shimmer, null)), /*#__PURE__*/React.createElement(Show, {
+    condition: loadingRenderer
+  }, /*#__PURE__*/React.createElement(props.loadingRenderer, {
+    style: {
+      marginTop: 16
+    }
+  }))))), /*#__PURE__*/React.createElement(Show, {
+    condition: !hasData
+  }, empty));
+});
+
+var notification = null;
+Notification.newInstance({
+  style: {
+    right: 32,
+    top: 32
+  }
+}, function (_notification) {
+  notification = _notification;
+});
+var notificationColors = {
+  success: 'green',
+  error: 'red',
+  warning: 'orange',
+  info: 'blue'
 };
+
+var NotificationRenderer = function NotificationRenderer(props) {
+  var type = props.type,
+      title = props.title,
+      message = props.message,
+      icon = props.icon;
+  var color = notificationColors[type];
+  return /*#__PURE__*/React.createElement(ListItem, {
+    style: {
+      borderLeft: "5px solid ".concat(color),
+      minWidth: 250,
+      padding: 8
+    },
+    avatar: icon,
+    avatarContainerStyle: {
+      color: notificationColors[type],
+      fontSize: 20,
+      marginRight: 4
+    },
+    titleStyle: {
+      fontWeight: 'bold'
+    },
+    title: title
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginLeft: 28,
+      fontSize: 12
+    }
+  }, message));
+};
+
+var notificationPusher = function notificationPusher(props) {
+  var duration = props.duration,
+      title = props.title,
+      message = props.message,
+      icon = props.icon,
+      type = props.type,
+      rest = _objectWithoutProperties(props, ["duration", "title", "message", "icon", "type"]);
+
+  notification.notice(_objectSpread2({
+    duration: duration || 5,
+    content: /*#__PURE__*/React.createElement(NotificationRenderer, {
+      title: title,
+      message: message,
+      type: type,
+      icon: icon
+    }),
+    style: {
+      padding: 0
+    }
+  }, rest));
+};
+
+notification.success = function (props) {
+  notificationPusher(_objectSpread2(_objectSpread2({}, props), {}, {
+    type: "success"
+  }));
+};
+
+notification.error = function (props) {
+  notificationPusher(_objectSpread2(_objectSpread2({}, props), {}, {
+    type: "error"
+  }));
+};
+
+notification.warning = function (props) {
+  notificationPusher(_objectSpread2(_objectSpread2({}, props), {}, {
+    type: "warning"
+  }));
+};
+
+notification.info = function (props) {
+  notificationPusher(_objectSpread2(_objectSpread2({}, props), {}, {
+    type: "info"
+  }));
+};
+
+var notification$1 = notification;
 
 var OverflowImages = function OverflowImages(props) {
   var images = props.images,
@@ -1066,55 +1176,6 @@ var OverflowImage = function OverflowImage(props) {
     key: index,
     size: size
   }));
-};
-
-var Card = function Card(props) {
-  var style = props.style,
-      avatar = props.avatar,
-      title = props.title,
-      titleRenderer = props.titleRenderer,
-      titleStyle = props.titleStyle,
-      headerStyle = props.headerStyle,
-      titleContainerStyle = props.titleContainerStyle,
-      description = props.description,
-      onHeaderClick = props.onHeaderClick,
-      subtitle = props.subtitle,
-      onTitleClick = props.onTitleClick,
-      className = props.className,
-      cardStyle = props.cardStyle,
-      childrenContainerStyle = props.childrenContainerStyle,
-      children = props.children;
-  return /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2({
-      borderRadius: 10,
-      padding: 16
-    }, style || {}),
-    className: className
-  }, /*#__PURE__*/React.createElement(Show, {
-    condition: avatar || title || titleRenderer || description || subtitle
-  }, /*#__PURE__*/React.createElement(ListItem, {
-    avatar: avatar,
-    title: title,
-    titleRenderer: titleRenderer,
-    style: _objectSpread2({
-      margin: 0,
-      padding: 0
-    }, titleContainerStyle || {}),
-    titleContainerStyle: headerStyle,
-    titleStyle: _objectSpread2({
-      fontSize: 18
-    }, titleStyle || {}),
-    description: description,
-    subtitle: subtitle,
-    onTitleClick: onTitleClick,
-    onClick: onHeaderClick
-  })), /*#__PURE__*/React.createElement(Show, {
-    condition: children
-  }, /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2(_objectSpread2({}, appStyles.card), cardStyle || {})
-  }, /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread2({}, childrenContainerStyle || {})
-  }, children))));
 };
 
 var Rate = function Rate(props) {
@@ -1160,6 +1221,21 @@ var Rate = function Rate(props) {
       }
     })));
   }));
+};
+
+var Redirect = function Redirect(props) {
+  var mode = props.mode,
+      _redirectURL = props.redirectURL;
+  var history = useHistory();
+  var redirectURL = _redirectURL || "/";
+  useEffect(function () {
+    if (mode === "replace") {
+      window.location.href = redirectURL;
+    } else {
+      history.push(redirectURL);
+    }
+  }, [mode, history, redirectURL]);
+  return null;
 };
 
 var Section = function Section(props) {
@@ -1452,4 +1528,4 @@ var ThreeDot = function ThreeDot(props) {
   }, children));
 };
 
-export { Badge, Button, Card, ColorPicker, EmptyResult, Header, Image, IncDecField, ListItem, OverflowImages, Popover, Rate, Section, Selectfield, Tag, TextListField, Textfield, ThreeDot, appStyles };
+export { Badge, Button, Card, ColorPicker, EmptyResult, FadeAnimation, Field, Header, Image, IncDecField, InfiniteScrollView as InfiniteScroll, ListItem, Mapper, OverflowImages, Popover, Rate, Redirect, Section, Selectfield, Show, Tag, TextListField, Textfield, ThreeDot, appStyles, notification$1 as notification, notificationPusher };

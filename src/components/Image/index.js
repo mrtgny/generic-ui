@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {coalasce, Show, takeIf} from "@reactivers/hooks";
+import {coalasce, takeIf} from "@reactivers/hooks";
+import Show from "../Show";
 import appStyles from '../../utils/styles'
 
 const Image = props => {

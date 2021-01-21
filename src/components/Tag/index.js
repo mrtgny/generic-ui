@@ -1,5 +1,6 @@
 import React from "react";
-import {changeColor, generatedColorFromString, Show, takeIf} from "@reactivers/hooks";
+import {changeColor, generatedColorFromString, takeIf} from "@reactivers/hooks";
+import Show from "../Show";
 import Button from "../Button";
 import appStyles from "../../utils/styles";
 

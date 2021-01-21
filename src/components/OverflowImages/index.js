@@ -1,5 +1,6 @@
 import React from 'react';
-import {Mapper, takeIf} from "@reactivers/hooks";
+import {takeIf} from "@reactivers/hooks";
+import Mapper from "../Mapper";
 import appStyles from "../../utils/styles";
 import Image from "../Image";
 import Badge from "../Badge";

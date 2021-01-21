@@ -1,7 +1,7 @@
 import React from 'react';
-import {Show} from "@reactivers/hooks";
 import ListItem from "../ListItem";
 import appStyles from "../../utils/styles";
+import Show from "../Show";
 
 const Card = props => {
     const {

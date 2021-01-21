@@ -10,8 +10,11 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@reactivers/hooks": "file:/Users/muratguney/Desktop/JavaScript/reactivers-library/hooks",
-    "react-color": "^2.19.3"
+    "history": "^5.0.0",
+    "rc-field-form": "^1.18.1",
+    "rc-notification": "^4.5.4",
+    "react-color": "^2.19.3",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
@@ -27,11 +30,9 @@
     "rollup-plugin-peer-deps-external": "^2.2.4"
   },
   "peerDependencies": {
-    "react": "^17.0.1",
+    "@reactivers/hooks": "file:../hooks",
     "moment": "^2.29.1",
-    "history": "^5.0.0",
-    "react-router-dom": "^5.2.0",
-    "react-color": "^2.19.3"
+    "react": "^17.0.1"
   },
   "scripts": {
     "build": "rollup -c",

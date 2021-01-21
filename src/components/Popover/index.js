@@ -1,5 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {coalasce, Show} from "@reactivers/hooks";
+import {coalasce} from "@reactivers/hooks";
+import Show from "../Show";
 
 const styles = {
     popover: {

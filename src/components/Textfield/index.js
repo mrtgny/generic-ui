@@ -1,6 +1,6 @@
 import React, {useCallback, useRef} from "react";
-import {Show} from "@reactivers/hooks";
 import appStyles from "../../utils/styles";
+import Show from "../Show";
 
 const Textfield = props => {
     const {

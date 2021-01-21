@@ -1,5 +1,6 @@
 import React from 'react';
-import {Show, takeIf} from "@reactivers/hooks";
+import {takeIf} from "@reactivers/hooks";
+import Show from "../Show";
 
 const ListItem = props => {
     const {
@@ -18,6 +19,7 @@ const ListItem = props => {
         subtitle,
         subtitleRenderer,
         headerContainerStyle,
+        avatarContainerStyle,
         selected,
         children
     } = props;
@@ -33,7 +35,8 @@ const ListItem = props => {
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center',
-                        marginRight: takeIf(!!title || !!titleRenderer, 8, 0)
+                        marginRight: takeIf(!!title || !!titleRenderer, 8, 0),
+                        ...(avatarContainerStyle || {}),
                     }}>
                         {avatar}
                     </div>

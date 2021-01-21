@@ -1,6 +1,6 @@
 import React from 'react';
-import {Show} from "@reactivers/hooks";
 import appStyles from "../../utils/styles";
+import Show from "../Show";
 
 const Header = (props) => {
     const {title, titleRenderer, style, titleStyle, rightContent} = props;

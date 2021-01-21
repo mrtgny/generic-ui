@@ -3,15 +3,35 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
-require('moment');
-require('moment/locale/tr');
-require('react-router-dom');
-var history$1 = require('history');
+var hooks = require('@reactivers/hooks');
 var reactColor = require('react-color');
+var rcFieldForm = require('rc-field-form');
+require('rc-notification/assets/index.css');
+var Notification = require('rc-notification');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var rcFieldForm__default = /*#__PURE__*/_interopDefaultLegacy(rcFieldForm);
+var Notification__default = /*#__PURE__*/_interopDefaultLegacy(Notification);
+
+var Badge = function Badge(props) {
+  var title = props.title,
+      children = props.children;
+  return /*#__PURE__*/React__default['default'].createElement("div", {
+    style: {
+      position: 'relative'
+    }
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      borderRadius: 10,
+      backgroundColor: '#eee'
+    }
+  }, title), children);
+};
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -188,267 +208,6 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-function _defineProperty$1(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function ownKeys$1(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2$1(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys$1(Object(source), true).forEach(function (key) {
-        _defineProperty$1(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys$1(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-var mainColor = "#002171";
-var successColor = "green";
-var dangerColor = "#EF5350";
-var appURLs = {
-  HTTP_REST_SERVER: {
-    development: "http://localhost:8080/api",
-    production: "http://localhost:8080/api"
-  },
-  WS_REST_SERVER: {
-    development: "ws://localhost:8080/ws",
-    production: "ws://localhost:8080/ws"
-  }
-};
-var APP_NAMES = {
-  WS_REST_SERVER: "WS_REST_SERVER",
-  HTTP_REST_SERVER: "HTTP_REST_SERVER"
-};
-var getAppURLs = function getAppURLs() {
-  return appURLs;
-};
-var getAppNames = function getAppNames() {
-  return APP_NAMES;
-};
-
-var getAppURL = function getAppURL(appname) {
-  var NODE_ENV = process.env.NODE_ENV;
-  var appURLs = getAppURLs() || {};
-  return appURLs[appname][NODE_ENV];
-};
-
-var getMainColor = function getMainColor() {
-  return mainColor;
-};
-var getSuccessColor = function getSuccessColor() {
-  return successColor;
-};
-var getDangerColor = function getDangerColor() {
-  return dangerColor;
-};
-var constants = {
-  mainColor: getMainColor(),
-  successColor: getSuccessColor(),
-  mainDangerColor: getDangerColor(),
-  REST_SERVER: getAppURL(getAppNames().HTTP_REST_SERVER),
-  WS_SERVER: getAppURL(getAppNames().WS_REST_SERVER)
-};
-
-var trTRLocales = {
-  Stores: function Stores() {
-    return "Mağazalar";
-  },
-  Home: function Home() {
-    return "Ana Sayfa";
-  },
-  Purchases: function Purchases() {
-    return "Satın Alımlar";
-  },
-  Sales: function Sales() {
-    return "Satışlar";
-  },
-  Profile: function Profile() {
-    return "Profil";
-  },
-  Menu: function Menu() {
-    return "Menü";
-  },
-  Search: function Search() {
-    return "Ara";
-  },
-  Payment: function Payment() {
-    return "Ödeme";
-  },
-  Orders: function Orders() {
-    return "Siparişler";
-  },
-  Tables: function Tables() {
-    return "Masalar";
-  }
-};
-var languageKeys = ["tr"];
-
-var exportLocales = function exportLocales(languageKeys, languages) {
-  var exp = {};
-  languageKeys.forEach(function (i) {
-    exp[i] = languages;
-  });
-  return exp;
-};
-
-var TRLocales = exportLocales(languageKeys, trTRLocales);
-
-var enUSLocales = {
-  Stores: function Stores() {
-    return "Stores";
-  },
-  Home: function Home() {
-    return "Home";
-  }
-};
-var languageKeys$1 = ["en", "en-us"];
-
-var exportLocales$1 = function exportLocales(languageKeys, languages) {
-  var exp = {};
-  languageKeys.forEach(function (i) {
-    exp[i] = languages;
-  });
-  return exp;
-};
-
-var ENLocales = exportLocales$1(languageKeys$1, enUSLocales);
-
-var AllLocales = _objectSpread2$1(_objectSpread2$1({}, TRLocales), ENLocales);
-var hashCode = function hashCode(str) {
-  var hash = 0;
-
-  for (var i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  return hash;
-};
-var generatedColorFromString = function generatedColorFromString(_i) {
-  var i = hashCode(_i);
-  var c = (i & 0x00FFFFFF).toString(16).toUpperCase();
-  return "#" + "00000".substring(0, 6 - c.length) + c;
-};
-var changeColor = function changeColor(color, amt) {
-  var usePound = false;
-  var col = color + "";
-
-  if (col[0] === "#") {
-    col = col.slice(1);
-    usePound = true;
-  }
-
-  var num = parseInt(col, 16);
-  var r = (num >> 16) + amt;
-
-  if (r > 255) {
-    r = 255;
-  } else if (r < 0) {
-    r = 0;
-  }
-
-  var b = (num >> 8 & 0x00FF) + amt;
-
-  if (b > 255) {
-    b = 255;
-  } else if (b < 0) {
-    b = 0;
-  }
-
-  var g = (num & 0x0000FF) + amt;
-
-  if (g > 255) {
-    g = 255;
-  } else if (g < 0) {
-    g = 0;
-  }
-
-  return (usePound ? "#" : "") + (g | b << 8 | r << 16).toString(16);
-};
-var takeIf = function takeIf(condition, value) {
-  var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
-
-  if (condition) {
-    return value;
-  } else {
-    return defaultValue;
-  }
-};
-var isNullOrUndefined = function isNullOrUndefined(item) {
-  return item === null || item === undefined;
-};
-var coalasce = function coalasce(first, second) {
-  if (isNullOrUndefined(first)) return second;
-  return first;
-};
-var monthsNumberArray = Array(12).fill(0).map(function (_, index) {
-  return index % 12 + 1;
-});
-
-var authActions = {
-  SET_TOKEN: "set-token",
-  UPDATE_AUTH: "update-auth",
-  LOGIN: 'login',
-  LOGOUT: 'logout',
-  SIGNUP: 'signup'
-};
-var notificationActions = {
-  PUSH_IN_APP_NOTIFICATION: 'pushInAppNotification',
-  POP_IN_APP_NOTIFICATION: 'popInAppNotification'
-};
-var modalActions = {
-  SHOW_MODAL: 'show-modal',
-  HIDE_MODAL: 'hide-modal',
-  DELETE_MODAL: "delete-modal"
-};
-var lodaingActions = {
-  INCREASE_LOADING_QUEUE: 'increaseLoadingQueue',
-  DECREASE_LOADING_QUEUE: 'decreaseLoadingQueue'
-};
-var socketActions = {
-  ADD_MESSAGE_LISTENER: 'addMessageListener',
-  REMOVE_MESSAGE_LISTENER: 'removeMessageListener',
-  SET_SOCKET: 'setSocket'
-};
-
-var actions = _objectSpread2$1(_objectSpread2$1(_objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, authActions), notificationActions), modalActions), lodaingActions), socketActions);
-
-var history = history$1.createBrowserHistory();
-
 var Show = function Show(props) {
   var condition = props.condition,
       willUnmount = props.willUnmount,
@@ -458,18 +217,6 @@ var Show = function Show(props) {
   }, [willUnmount]);
   if (condition) return children;
   return null;
-};
-
-var Mapper = function Mapper(props) {
-  var items = props.items,
-      map = props.map,
-      children = props.children;
-  if (children) return (items || []).map(function (item, index) {
-    return /*#__PURE__*/React.cloneElement(children, _objectSpread2$1(_objectSpread2$1({}, item), {}, {
-      key: index
-    }));
-  });
-  return (items || []).map(map);
 };
 
 var appStyles = {
@@ -599,84 +346,6 @@ var appStyles = {
   }
 };
 
-var Image = function Image(props) {
-  var style = props.style,
-      className = props.className,
-      hidePlaceholder = props.hidePlaceholder,
-      src = props.src,
-      alt = props.alt,
-      _onLoad = props.onLoad,
-      _placheholder = props.placeholder,
-      _size = props.size,
-      rest = _objectWithoutProperties(props, ["style", "className", "hidePlaceholder", "src", "alt", "onLoad", "placeholder", "size"]);
-
-  var _useState = React.useState(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      loaded = _useState2[0],
-      setLoaded = _useState2[1];
-
-  var size = takeIf(_size, {
-    width: _size,
-    height: _size,
-    borderRadius: '50%'
-  }, {});
-  var placeholder = coalasce(_placheholder, "P");
-  var fontSize = takeIf(isNaN(_size / 2), 24, _size / 2);
-  var displayImage = takeIf(loaded, undefined, 'none');
-  var onLoad = React.useCallback(function () {
-    setLoaded(true);
-    if (_onLoad) _onLoad();
-  }, [_onLoad]);
-  return /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({}, size), appStyles.defaultShadow), appStyles.center), {}, {
-      backgroundColor: "#eee",
-      overflow: "hidden"
-    }, style),
-    className: className
-  }, /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: src
-  }, /*#__PURE__*/React__default['default'].createElement("img", _extends({
-    onLoad: onLoad,
-    src: src,
-    alt: alt,
-    style: _objectSpread2(_objectSpread2(_objectSpread2({}, appStyles.roundedImage), style), {}, {
-      display: displayImage
-    })
-  }, rest))), /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: !loaded && !hidePlaceholder
-  }, /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2({
-      width: '100%',
-      height: '100%'
-    }, appStyles.center)
-  }, /*#__PURE__*/React__default['default'].createElement("p", {
-    style: {
-      margin: 0,
-      fontSize: fontSize,
-      fontWeight: 'bold',
-      padding: 4
-    }
-  }, placeholder))));
-};
-
-var Badge = function Badge(props) {
-  var title = props.title,
-      children = props.children;
-  return /*#__PURE__*/React__default['default'].createElement("div", {
-    style: {
-      position: 'relative'
-    }
-  }, /*#__PURE__*/React__default['default'].createElement("div", {
-    style: {
-      position: 'absolute',
-      right: 0,
-      top: 0,
-      borderRadius: 10,
-      backgroundColor: '#eee'
-    }
-  }, title), children);
-};
-
 var Button = function Button(props) {
   var style = props.style,
       icon = props.icon,
@@ -686,8 +355,8 @@ var Button = function Button(props) {
       _onClick = props.onClick,
       _htmlType = props.htmlType,
       children = props.children;
-  var iconSize = coalasce(_iconSize, 32);
-  var htmlType = coalasce(_htmlType, "button");
+  var iconSize = hooks.coalasce(_iconSize, 32);
+  var htmlType = hooks.coalasce(_htmlType, "button");
   var iconButton = !children && !title;
   var className = "no-select ";
   var onClick = React.useCallback(function (e) {
@@ -699,11 +368,11 @@ var Button = function Button(props) {
     style: _objectSpread2({
       justifyContent: 'center',
       alignItems: 'center',
-      width: takeIf(iconButton, iconSize),
-      minWidth: takeIf(iconButton, iconSize),
-      height: takeIf(iconButton, iconSize),
-      minHeight: takeIf(iconButton, iconSize),
-      borderRadius: takeIf(iconButton, "50%")
+      width: hooks.takeIf(iconButton, iconSize),
+      minWidth: hooks.takeIf(iconButton, iconSize),
+      height: hooks.takeIf(iconButton, iconSize),
+      minHeight: hooks.takeIf(iconButton, iconSize),
+      borderRadius: hooks.takeIf(iconButton, "50%")
     }, style || {}),
     type: htmlType,
     onClick: onClick,
@@ -712,12 +381,133 @@ var Button = function Button(props) {
     condition: icon
   }, /*#__PURE__*/React__default['default'].createElement("div", {
     style: _objectSpread2({
-      marginRight: takeIf(!iconButton, 8),
-      fontSize: takeIf(iconButton, 18, 12),
-      width: takeIf(iconButton, "100%", 12),
-      height: takeIf(iconButton, "100%", 12)
+      marginRight: hooks.takeIf(!iconButton, 8),
+      fontSize: hooks.takeIf(iconButton, 18, 12),
+      width: hooks.takeIf(iconButton, "100%", 12),
+      height: hooks.takeIf(iconButton, "100%", 12)
     }, appStyles.center)
   }, icon)), /*#__PURE__*/React__default['default'].createElement("div", null, children || title));
+};
+
+var ListItem = function ListItem(props) {
+  var style = props.style,
+      avatar = props.avatar,
+      title = props.title,
+      lastItem = props.lastItem,
+      titleRenderer = props.titleRenderer,
+      description = props.description,
+      className = props.className,
+      titleStyle = props.titleStyle,
+      subtitleStyle = props.subtitleStyle,
+      titleContainerStyle = props.titleContainerStyle,
+      onClick = props.onClick,
+      onTitleClick = props.onTitleClick,
+      subtitle = props.subtitle,
+      subtitleRenderer = props.subtitleRenderer,
+      headerContainerStyle = props.headerContainerStyle,
+      avatarContainerStyle = props.avatarContainerStyle,
+      selected = props.selected,
+      children = props.children;
+  var borderBottom = hooks.takeIf(lastItem, '1px solid #eee');
+  var titleContainerClassName = hooks.takeIf(onTitleClick, "clickable", "");
+  return /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      borderBottom: borderBottom,
+      padding: 4
+    }, style || {}),
+    className: className,
+    onClick: onClick
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      display: "flex",
+      alignItems: 'center'
+    }, headerContainerStyle || {})
+  }, /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: avatar
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      display: 'flex',
+      justifyContent: 'center',
+      marginRight: hooks.takeIf(!!title || !!titleRenderer, 8, 0)
+    }, avatarContainerStyle || {})
+  }, avatar)), /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      width: '100%',
+      padding: 4
+    }, titleContainerStyle || {}),
+    onClick: onTitleClick,
+    className: titleContainerClassName
+  }, /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: titleRenderer
+  }, titleRenderer), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: title
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      margin: 0,
+      color: hooks.takeIf(selected, "#1890ff")
+    }, titleStyle || {})
+  }, title)), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: subtitle
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      margin: 0,
+      fontSize: 10,
+      color: 'black'
+    }, subtitleStyle || {})
+  }, subtitle)), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: subtitleRenderer
+  }, subtitleRenderer)), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: description
+  }, description)), children);
+};
+
+var Card = function Card(props) {
+  var style = props.style,
+      avatar = props.avatar,
+      title = props.title,
+      titleRenderer = props.titleRenderer,
+      titleStyle = props.titleStyle,
+      headerStyle = props.headerStyle,
+      titleContainerStyle = props.titleContainerStyle,
+      description = props.description,
+      onHeaderClick = props.onHeaderClick,
+      subtitle = props.subtitle,
+      onTitleClick = props.onTitleClick,
+      className = props.className,
+      cardStyle = props.cardStyle,
+      childrenContainerStyle = props.childrenContainerStyle,
+      children = props.children;
+  return /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      borderRadius: 10,
+      padding: 16
+    }, style || {}),
+    className: className
+  }, /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: avatar || title || titleRenderer || description || subtitle
+  }, /*#__PURE__*/React__default['default'].createElement(ListItem, {
+    avatar: avatar,
+    title: title,
+    titleRenderer: titleRenderer,
+    style: _objectSpread2({
+      margin: 0,
+      padding: 0
+    }, titleContainerStyle || {}),
+    titleContainerStyle: headerStyle,
+    titleStyle: _objectSpread2({
+      fontSize: 18
+    }, titleStyle || {}),
+    description: description,
+    subtitle: subtitle,
+    onTitleClick: onTitleClick,
+    onClick: onHeaderClick
+  })), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: children
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2(_objectSpread2({}, appStyles.card), cardStyle || {})
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({}, childrenContainerStyle || {})
+  }, children))));
 };
 
 var styles = {
@@ -740,8 +530,8 @@ var Popover = function Popover(props) {
       _trigger = props.trigger,
       _alignment = props.alignment,
       children = props.children;
-  var trigger = coalasce(_trigger, "click");
-  var alignment = coalasce(_alignment, "bottom");
+  var trigger = hooks.coalasce(_trigger, "click");
+  var alignment = hooks.coalasce(_alignment, "bottom");
   var target = React.useRef(null);
 
   var _useState = React.useState(false),
@@ -901,6 +691,62 @@ var EmptyResult = function EmptyResult(props) {
   }, title)));
 };
 
+var FadeAnimation = function FadeAnimation(props) {
+  var style = props.style,
+      _type = props.type,
+      _duration = props.duration,
+      _delay = props.delay,
+      onAnimationComplete = props.onAnimationComplete,
+      children = props.children;
+  var duration = _duration || 100;
+  var delay = _delay || 0;
+  var type = _type || "in";
+
+  var _useState = React.useState(type === "in" ? 0 : 1),
+      _useState2 = _slicedToArray(_useState, 2),
+      opacity = _useState2[0],
+      setOpacity = _useState2[1];
+
+  var toValue = type === "in" ? 1 : 0;
+  React.useEffect(function () {
+    if (opacity === toValue && onAnimationComplete) {
+      setTimeout(function () {
+        onAnimationComplete();
+      }, duration + delay);
+    }
+  }, [opacity]);
+  React.useEffect(function () {
+    if (type === "in") {
+      setOpacity(toValue);
+    } else {
+      setOpacity(toValue);
+    }
+  }, [type]);
+  return /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      opacity: opacity,
+      transition: "".concat(duration),
+      transitionDelay: delay
+    }, style || {})
+  }, children);
+};
+
+var Field = function Field(props) {
+  var style = props.style,
+      name = props.name,
+      children = props.children;
+  return /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      width: '100%',
+      margin: '16px 0'
+    }, style || {})
+  }, /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: name
+  }, /*#__PURE__*/React__default['default'].createElement(rcFieldForm.Field, props)), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: !name
+  }, children));
+};
+
 var Header = function Header(props) {
   var title = props.title,
       titleRenderer = props.titleRenderer,
@@ -923,6 +769,66 @@ var Header = function Header(props) {
       margin: 0
     }, appStyles.cardTitle)
   }, title))), rightContent);
+};
+
+var Image = function Image(props) {
+  var style = props.style,
+      className = props.className,
+      hidePlaceholder = props.hidePlaceholder,
+      src = props.src,
+      alt = props.alt,
+      _onLoad = props.onLoad,
+      _placheholder = props.placeholder,
+      _size = props.size,
+      rest = _objectWithoutProperties(props, ["style", "className", "hidePlaceholder", "src", "alt", "onLoad", "placeholder", "size"]);
+
+  var _useState = React.useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      loaded = _useState2[0],
+      setLoaded = _useState2[1];
+
+  var size = hooks.takeIf(_size, {
+    width: _size,
+    height: _size,
+    borderRadius: '50%'
+  }, {});
+  var placeholder = hooks.coalasce(_placheholder, "P");
+  var fontSize = hooks.takeIf(isNaN(_size / 2), 24, _size / 2);
+  var displayImage = hooks.takeIf(loaded, undefined, 'none');
+  var onLoad = React.useCallback(function () {
+    setLoaded(true);
+    if (_onLoad) _onLoad();
+  }, [_onLoad]);
+  return /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2(_objectSpread2(_objectSpread2(_objectSpread2({}, size), appStyles.defaultShadow), appStyles.center), {}, {
+      backgroundColor: "#eee",
+      overflow: "hidden"
+    }, style),
+    className: className
+  }, /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: src
+  }, /*#__PURE__*/React__default['default'].createElement("img", _extends({
+    onLoad: onLoad,
+    src: src,
+    alt: alt,
+    style: _objectSpread2(_objectSpread2(_objectSpread2({}, appStyles.roundedImage), style), {}, {
+      display: displayImage
+    })
+  }, rest))), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: !loaded && !hidePlaceholder
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: _objectSpread2({
+      width: '100%',
+      height: '100%'
+    }, appStyles.center)
+  }, /*#__PURE__*/React__default['default'].createElement("p", {
+    style: {
+      margin: 0,
+      fontSize: fontSize,
+      fontWeight: 'bold',
+      padding: 4
+    }
+  }, placeholder))));
 };
 
 var IncDecField = function IncDecField(props) {
@@ -962,76 +868,281 @@ var IncDecField = function IncDecField(props) {
   }));
 };
 
-var ListItem = function ListItem(props) {
-  var style = props.style,
-      avatar = props.avatar,
-      title = props.title,
-      lastItem = props.lastItem,
-      titleRenderer = props.titleRenderer,
-      description = props.description,
-      className = props.className,
-      titleStyle = props.titleStyle,
-      subtitleStyle = props.subtitleStyle,
-      titleContainerStyle = props.titleContainerStyle,
-      onClick = props.onClick,
-      onTitleClick = props.onTitleClick,
-      subtitle = props.subtitle,
-      subtitleRenderer = props.subtitleRenderer,
-      headerContainerStyle = props.headerContainerStyle,
-      selected = props.selected,
+var Mapper = function Mapper(props) {
+  var items = props.items,
+      map = props.map,
       children = props.children;
-  var borderBottom = takeIf(lastItem, '1px solid #eee');
-  var titleContainerClassName = takeIf(onTitleClick, "clickable", "");
+  if (children) return (items || []).map(function (item, index) {
+    return /*#__PURE__*/React.cloneElement(children, _objectSpread2(_objectSpread2({}, item), {}, {
+      key: index
+    }));
+  });
+  return (items || []).map(map);
+};
+
+var InfiniteScrollView = /*#__PURE__*/React.forwardRef(function (props, ref) {
+  var style = props.style,
+      endpoint = props.endpoint,
+      _apiOptions = props.apiOptions,
+      shimmer = props.shimmer,
+      onDataChange = props.onDataChange,
+      render = props.render,
+      _pageSize = props.pageSize,
+      empty = props.empty,
+      reload = props.reload,
+      filterOptions = props.filterOptions,
+      onReload = props.onReload,
+      loadingRenderer = props.loadingRenderer;
+  var apiOptions = _apiOptions || {};
+  var method = apiOptions.method,
+      params = apiOptions.params,
+      apiOptionsOnSuccess = apiOptions.onSuccess;
+  var pageSize = _pageSize || 5;
+
+  var _useState = React.useState(1),
+      _useState2 = _slicedToArray(_useState, 2),
+      page = _useState2[0],
+      setPage = _useState2[1];
+
+  var _useState3 = React.useState([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      data = _useState4[0],
+      setData = _useState4[1];
+
+  var _useState5 = React.useState({}),
+      _useState6 = _slicedToArray(_useState5, 2),
+      filter = _useState6[0],
+      setFilter = _useState6[1];
+
+  var reloaderRef = React.useRef(null);
+
+  var updateDataByIndex = function updateDataByIndex(index, item) {
+    setData(function (oldData) {
+      oldData[index] = item;
+      return oldData;
+    });
+  };
+
+  React.useImperativeHandle(ref, function () {
+    return {
+      updateDataByIndex: updateDataByIndex
+    };
+  });
+  var containerView = React.useRef(null);
+
+  var onSuccess = function onSuccess(response) {
+    if (apiOptionsOnSuccess) {
+      apiOptionsOnSuccess(response);
+    }
+
+    setData(function (oldData) {
+      var newData = response.data.currentPage === 1 ? response.data.results || [] : [].concat(_toConsumableArray(oldData), _toConsumableArray(response.data.results || []));
+      if (onDataChange) onDataChange(newData);
+      return newData;
+    });
+  };
+
+  var _useApi = hooks.useApi({
+    onSuccess: onSuccess
+  }),
+      fetched = _useApi.fetched,
+      firstTimeFetched = _useApi.firstTimeFetched,
+      apiLoad = _useApi.load,
+      response = _useApi.response;
+
+  var _ref = response.data || {},
+      pageCount = _ref.pageCount;
+
+  var hasNextPage = (page || 1) < (pageCount || 2);
+  var load = React.useCallback(function () {
+    var hasNextPage = (page || 1) <= (pageCount || 2);
+    if (!hasNextPage) return;
+
+    var _endpoint = "".concat(endpoint, "/").concat(page, "/").concat(pageSize);
+
+    var _method = method || (filterOptions ? "POST" : "GET");
+
+    var _params = params || (filterOptions ? filter : undefined);
+
+    apiLoad({
+      endpoint: _endpoint,
+      method: _method,
+      params: _params
+    });
+  }, [page, pageCount, endpoint, pageSize, method, params, filterOptions, apiLoad, filter]);
+  var nextPage = React.useCallback(function () {
+    if (fetched && hasNextPage) {
+      setPage(function (oldPage) {
+        return oldPage + 1;
+      });
+    }
+  }, [fetched, hasNextPage]);
+  var onRefresh = React.useCallback(function () {
+    if (page === 1) {
+      load();
+    } else {
+      setPage(1);
+    }
+  }, [load, page]);
+  var shouldFetchNextPage = React.useCallback(function () {
+    if (!reloaderRef.current) return false;
+    var reloaderRects = reloaderRef.current.getClientRects();
+    var reloaderOffsetY = reloaderRects[0].top;
+    var shouldFetch = reloaderOffsetY - 20 <= window.innerHeight;
+    return shouldFetch;
+  }, [reloaderRef]);
+  var onScroll = React.useCallback(function (event) {
+    if (shouldFetchNextPage()) {
+      nextPage();
+    }
+  }, [shouldFetchNextPage, nextPage]);
+  React.useEffect(function () {
+    if (shouldFetchNextPage()) nextPage();
+  }, [shouldFetchNextPage, nextPage]);
+  React.useEffect(function () {
+    load();
+  }, [load]);
+  React.useEffect(function () {
+    var appLayout = document.getElementsByTagName("body")[0];
+    appLayout.onscroll = onScroll;
+  }, [onScroll]);
+  React.useEffect(function () {
+    if (reload) {
+      onRefresh();
+      onReload();
+    }
+  }, [onRefresh, onReload, reload]);
+
+  if (!firstTimeFetched) {
+    return shimmer ? /*#__PURE__*/React__default['default'].createElement(props.shimmer, null) : /*#__PURE__*/React__default['default'].createElement(props.loadingRenderer, null);
+  }
+
+  var hasData = !!data.length;
   return /*#__PURE__*/React__default['default'].createElement("div", {
     style: _objectSpread2({
-      borderBottom: borderBottom,
-      padding: 4
+      padding: 16
     }, style || {}),
-    className: className,
-    onClick: onClick
-  }, /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2({
-      display: "flex",
-      alignItems: 'center'
-    }, headerContainerStyle || {})
+    ref: containerView
   }, /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: avatar
-  }, /*#__PURE__*/React__default['default'].createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginRight: takeIf(!!title || !!titleRenderer, 8, 0)
+    condition: hasData
+  }, /*#__PURE__*/React__default['default'].createElement(Mapper, {
+    items: data,
+    map: function map(item, index) {
+      return render(item, index, {
+        page: page,
+        pageSize: pageSize
+      });
     }
-  }, avatar)), /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2({
-      width: '100%',
-      padding: 4
-    }, titleContainerStyle || {}),
-    onClick: onTitleClick,
-    className: titleContainerClassName
+  }), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: hasNextPage
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    ref: reloaderRef
   }, /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: titleRenderer
-  }, titleRenderer), /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: title
-  }, /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2({
-      margin: 0,
-      color: takeIf(selected, "#1890ff")
-    }, titleStyle || {})
-  }, title)), /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: subtitle
-  }, /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2({
-      margin: 0,
-      fontSize: 10,
-      color: 'black'
-    }, subtitleStyle || {})
-  }, subtitle)), /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: subtitleRenderer
-  }, subtitleRenderer)), /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: description
-  }, description)), children);
+    condition: shimmer
+  }, /*#__PURE__*/React__default['default'].createElement(props.shimmer, null)), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: loadingRenderer
+  }, /*#__PURE__*/React__default['default'].createElement(props.loadingRenderer, {
+    style: {
+      marginTop: 16
+    }
+  }))))), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: !hasData
+  }, empty));
+});
+
+var notification = null;
+Notification__default['default'].newInstance({
+  style: {
+    right: 32,
+    top: 32
+  }
+}, function (_notification) {
+  notification = _notification;
+});
+var notificationColors = {
+  success: 'green',
+  error: 'red',
+  warning: 'orange',
+  info: 'blue'
 };
+
+var NotificationRenderer = function NotificationRenderer(props) {
+  var type = props.type,
+      title = props.title,
+      message = props.message,
+      icon = props.icon;
+  var color = notificationColors[type];
+  return /*#__PURE__*/React__default['default'].createElement(ListItem, {
+    style: {
+      borderLeft: "5px solid ".concat(color),
+      minWidth: 250,
+      padding: 8
+    },
+    avatar: icon,
+    avatarContainerStyle: {
+      color: notificationColors[type],
+      fontSize: 20,
+      marginRight: 4
+    },
+    titleStyle: {
+      fontWeight: 'bold'
+    },
+    title: title
+  }, /*#__PURE__*/React__default['default'].createElement("p", {
+    style: {
+      marginLeft: 28,
+      fontSize: 12
+    }
+  }, message));
+};
+
+var notificationPusher = function notificationPusher(props) {
+  var duration = props.duration,
+      title = props.title,
+      message = props.message,
+      icon = props.icon,
+      type = props.type,
+      rest = _objectWithoutProperties(props, ["duration", "title", "message", "icon", "type"]);
+
+  notification.notice(_objectSpread2({
+    duration: duration || 5,
+    content: /*#__PURE__*/React__default['default'].createElement(NotificationRenderer, {
+      title: title,
+      message: message,
+      type: type,
+      icon: icon
+    }),
+    style: {
+      padding: 0
+    }
+  }, rest));
+};
+
+notification.success = function (props) {
+  notificationPusher(_objectSpread2(_objectSpread2({}, props), {}, {
+    type: "success"
+  }));
+};
+
+notification.error = function (props) {
+  notificationPusher(_objectSpread2(_objectSpread2({}, props), {}, {
+    type: "error"
+  }));
+};
+
+notification.warning = function (props) {
+  notificationPusher(_objectSpread2(_objectSpread2({}, props), {}, {
+    type: "warning"
+  }));
+};
+
+notification.info = function (props) {
+  notificationPusher(_objectSpread2(_objectSpread2({}, props), {}, {
+    type: "info"
+  }));
+};
+
+var notification$1 = notification;
 
 var OverflowImages = function OverflowImages(props) {
   var images = props.images,
@@ -1039,7 +1150,7 @@ var OverflowImages = function OverflowImages(props) {
       size = props.size;
   var maxCount = _maxCount || 3;
   var overflowItemsCount = images.length - maxCount;
-  var count = takeIf(overflowItemsCount > 0, "+".concat(overflowItemsCount));
+  var count = hooks.takeIf(overflowItemsCount > 0, "+".concat(overflowItemsCount));
   return /*#__PURE__*/React__default['default'].createElement("div", {
     style: _objectSpread2(_objectSpread2({}, appStyles.center), {}, {
       flexDirection: 'column',
@@ -1065,7 +1176,7 @@ var OverflowImage = function OverflowImage(props) {
   return /*#__PURE__*/React__default['default'].createElement("div", {
     style: {
       border: '1px solid white',
-      marginLeft: takeIf(index, -32),
+      marginLeft: hooks.takeIf(index, -32),
       borderRadius: size
     },
     key: index
@@ -1074,55 +1185,6 @@ var OverflowImage = function OverflowImage(props) {
     key: index,
     size: size
   }));
-};
-
-var Card = function Card(props) {
-  var style = props.style,
-      avatar = props.avatar,
-      title = props.title,
-      titleRenderer = props.titleRenderer,
-      titleStyle = props.titleStyle,
-      headerStyle = props.headerStyle,
-      titleContainerStyle = props.titleContainerStyle,
-      description = props.description,
-      onHeaderClick = props.onHeaderClick,
-      subtitle = props.subtitle,
-      onTitleClick = props.onTitleClick,
-      className = props.className,
-      cardStyle = props.cardStyle,
-      childrenContainerStyle = props.childrenContainerStyle,
-      children = props.children;
-  return /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2({
-      borderRadius: 10,
-      padding: 16
-    }, style || {}),
-    className: className
-  }, /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: avatar || title || titleRenderer || description || subtitle
-  }, /*#__PURE__*/React__default['default'].createElement(ListItem, {
-    avatar: avatar,
-    title: title,
-    titleRenderer: titleRenderer,
-    style: _objectSpread2({
-      margin: 0,
-      padding: 0
-    }, titleContainerStyle || {}),
-    titleContainerStyle: headerStyle,
-    titleStyle: _objectSpread2({
-      fontSize: 18
-    }, titleStyle || {}),
-    description: description,
-    subtitle: subtitle,
-    onTitleClick: onTitleClick,
-    onClick: onHeaderClick
-  })), /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: children
-  }, /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2(_objectSpread2({}, appStyles.card), cardStyle || {})
-  }, /*#__PURE__*/React__default['default'].createElement("div", {
-    style: _objectSpread2({}, childrenContainerStyle || {})
-  }, children))));
 };
 
 var Rate = function Rate(props) {
@@ -1170,6 +1232,21 @@ var Rate = function Rate(props) {
   }));
 };
 
+var Redirect = function Redirect(props) {
+  var mode = props.mode,
+      _redirectURL = props.redirectURL;
+  var history = hooks.useHistory();
+  var redirectURL = _redirectURL || "/";
+  React.useEffect(function () {
+    if (mode === "replace") {
+      window.location.href = redirectURL;
+    } else {
+      history.push(redirectURL);
+    }
+  }, [mode, history, redirectURL]);
+  return null;
+};
+
 var Section = function Section(props) {
   var title = props.title,
       extra = props.extra,
@@ -1210,8 +1287,8 @@ var Selectfield = function Selectfield(props) {
       _selectFieldClassName = props.selectFieldClassName;
   var selectFieldClassName = "select-field ";
   if (_selectFieldClassName) selectFieldClassName += _selectFieldClassName;
-  var valueKey = coalasce(_valueKey, "value");
-  var descriptionKey = coalasce(_descriptionKey, "title");
+  var valueKey = hooks.coalasce(_valueKey, "value");
+  var descriptionKey = hooks.coalasce(_descriptionKey, "title");
   var onChange = React.useCallback(function (e) {
     var selectedValueKey = e.target.value;
 
@@ -1276,9 +1353,9 @@ var Tag = function Tag(props) {
       closeButtonStyle = props.closeButtonStyle,
       children = props.children;
   var type = _type || "outlined";
-  var color = _color || (generatedColor ? generatedColorFromString(description) : "#cccccc");
+  var color = _color || (generatedColor ? hooks.generatedColorFromString(description) : "#cccccc");
   var textColor = type === "filled" ? '#ffffff' : color || "";
-  var backgroundColor = type === "filled" ? color : "".concat(changeColor(color, 150));
+  var backgroundColor = type === "filled" ? color : "".concat(hooks.changeColor(color, 150));
   return /*#__PURE__*/React__default['default'].createElement("div", {
     style: _objectSpread2(_objectSpread2({
       padding: "8px 16px",
@@ -1286,10 +1363,10 @@ var Tag = function Tag(props) {
       backgroundColor: backgroundColor,
       maxWidth: 'calc(100% - 16px)'
     }, appStyles.center), style || {}),
-    className: "\n             ".concat(takeIf(onClick, "clickable", ""), "\n              ").concat(className || "", "\n              "),
+    className: "\n             ".concat(hooks.takeIf(onClick, "clickable", ""), "\n              ").concat(className || "", "\n              "),
     onClick: onClick
   }, /*#__PURE__*/React__default['default'].createElement("div", {
-    className: takeIf(onTextClick, "clickable", ""),
+    className: hooks.takeIf(onTextClick, "clickable", ""),
     style: _objectSpread2({
       color: textColor,
       margin: 0,
@@ -1409,7 +1486,7 @@ var TextListField = function TextListField(props) {
 
     _onChange(_toConsumableArray(values));
   }, [values, valueTransformer, _onChange]);
-  var suffix = takeIf(checkButton, checkButton({
+  var suffix = hooks.takeIf(checkButton, checkButton({
     disabled: !value[descriptionKey],
     onClick: onSave
   }), /*#__PURE__*/React__default['default'].createElement(Button, {
@@ -1460,22 +1537,42 @@ var ThreeDot = function ThreeDot(props) {
   }, children));
 };
 
+Object.defineProperty(exports, 'Form', {
+    enumerable: true,
+    get: function () {
+        return rcFieldForm__default['default'];
+    }
+});
+Object.defineProperty(exports, 'useForm', {
+    enumerable: true,
+    get: function () {
+        return rcFieldForm.useForm;
+    }
+});
 exports.Badge = Badge;
 exports.Button = Button;
 exports.Card = Card;
 exports.ColorPicker = ColorPicker;
 exports.EmptyResult = EmptyResult;
+exports.FadeAnimation = FadeAnimation;
+exports.Field = Field;
 exports.Header = Header;
 exports.Image = Image;
 exports.IncDecField = IncDecField;
+exports.InfiniteScroll = InfiniteScrollView;
 exports.ListItem = ListItem;
+exports.Mapper = Mapper;
 exports.OverflowImages = OverflowImages;
 exports.Popover = Popover;
 exports.Rate = Rate;
+exports.Redirect = Redirect;
 exports.Section = Section;
 exports.Selectfield = Selectfield;
+exports.Show = Show;
 exports.Tag = Tag;
 exports.TextListField = TextListField;
 exports.Textfield = Textfield;
 exports.ThreeDot = ThreeDot;
 exports.appStyles = appStyles;
+exports.notification = notification$1;
+exports.notificationPusher = notificationPusher;

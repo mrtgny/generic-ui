@@ -1,6 +1,6 @@
 import React from "react";
 import Popover from "../Popover";
-import {appStyles} from "../../index";
+import appStyles from "../../utils/styles";
 
 const ThreeDot = props => {
     const {title, children} = props;

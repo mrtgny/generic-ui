@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {SwatchesPicker} from "react-color";
-import {Show} from "@reactivers/hooks";
 import Popover from "../Popover";
+import Show from "../Show";
 
 const ColorPicker = props => {
     const {
