@@ -6,14 +6,20 @@ var React = require('react');
 var hooks = require('@reactivers/hooks');
 var reactColor = require('react-color');
 var rcFieldForm = require('rc-field-form');
+var reactFlexboxGrid = require('react-flexbox-grid');
+var Dialog = require('rc-dialog');
+require('rc-dialog/assets/index.css');
 require('rc-notification/assets/index.css');
 var Notification = require('rc-notification');
+var UUpload = require('rc-upload');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 var rcFieldForm__default = /*#__PURE__*/_interopDefaultLegacy(rcFieldForm);
+var Dialog__default = /*#__PURE__*/_interopDefaultLegacy(Dialog);
 var Notification__default = /*#__PURE__*/_interopDefaultLegacy(Notification);
+var UUpload__default = /*#__PURE__*/_interopDefaultLegacy(UUpload);
 
 var Badge = function Badge(props) {
   var title = props.title,
@@ -740,11 +746,22 @@ var Field = function Field(props) {
       width: '100%',
       margin: '16px 0'
     }, style || {})
-  }, /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: name
-  }, /*#__PURE__*/React__default['default'].createElement(rcFieldForm.Field, props)), /*#__PURE__*/React__default['default'].createElement(Show, {
-    condition: !name
+  }, /*#__PURE__*/React__default['default'].createElement(FieldOrChildren, {
+    name: name,
+    parentProps: props
   }, children));
+};
+
+var FieldOrChildren = function FieldOrChildren(props) {
+  var name = props.name,
+      parentProps = props.parentProps,
+      children = props.children;
+
+  if (hooks.isNullOrUndefined(name)) {
+    return children;
+  }
+
+  return /*#__PURE__*/React__default['default'].createElement(rcFieldForm.Field, parentProps);
 };
 
 var Header = function Header(props) {
@@ -1049,6 +1066,16 @@ var InfiniteScrollView = /*#__PURE__*/React.forwardRef(function (props, ref) {
     condition: !hasData
   }, empty));
 });
+
+var Modal = function Modal(props) {
+  var children = props.children,
+      rest = _objectWithoutProperties(props, ["children"]);
+
+  return /*#__PURE__*/React__default['default'].createElement(Dialog__default['default'], _extends({
+    animation: "zoom",
+    transitionName: "zoom"
+  }, rest), children);
+};
 
 var notification = null;
 Notification__default['default'].newInstance({
@@ -1537,6 +1564,17 @@ var ThreeDot = function ThreeDot(props) {
   }, children));
 };
 
+var Upload = function Upload(props) {
+  var style = props.style,
+      rest = _objectWithoutProperties(props, ["style"]);
+
+  return /*#__PURE__*/React__default['default'].createElement(UUpload__default['default'], _extends({
+    style: _objectSpread2({
+      outline: 'none'
+    }, style || {})
+  }, rest));
+};
+
 Object.defineProperty(exports, 'Form', {
     enumerable: true,
     get: function () {
@@ -1547,6 +1585,24 @@ Object.defineProperty(exports, 'useForm', {
     enumerable: true,
     get: function () {
         return rcFieldForm.useForm;
+    }
+});
+Object.defineProperty(exports, 'Col', {
+    enumerable: true,
+    get: function () {
+        return reactFlexboxGrid.Col;
+    }
+});
+Object.defineProperty(exports, 'Grid', {
+    enumerable: true,
+    get: function () {
+        return reactFlexboxGrid.Grid;
+    }
+});
+Object.defineProperty(exports, 'Row', {
+    enumerable: true,
+    get: function () {
+        return reactFlexboxGrid.Row;
     }
 });
 exports.Badge = Badge;
@@ -1562,6 +1618,7 @@ exports.IncDecField = IncDecField;
 exports.InfiniteScroll = InfiniteScrollView;
 exports.ListItem = ListItem;
 exports.Mapper = Mapper;
+exports.Modal = Modal;
 exports.OverflowImages = OverflowImages;
 exports.Popover = Popover;
 exports.Rate = Rate;
@@ -1573,6 +1630,7 @@ exports.Tag = Tag;
 exports.TextListField = TextListField;
 exports.Textfield = Textfield;
 exports.ThreeDot = ThreeDot;
+exports.Upload = Upload;
 exports.appStyles = appStyles;
 exports.notification = notification$1;
 exports.notificationPusher = notificationPusher;

@@ -2,7 +2,9 @@ import babel from '@rollup/plugin-babel';
 import external from 'rollup-plugin-peer-deps-external';
 import del from 'rollup-plugin-delete';
 import pkg from './package.json';
+import path from 'path'
 import resolve from "rollup-plugin-node-resolve";
+import postcss from 'rollup-plugin-postcss'
 
 export default {
     input: pkg.source,
@@ -19,6 +21,11 @@ export default {
             includeDependencies: true
         }),
         resolve(),
+        postcss({
+            minimize: true,
+            extensions: ['.css'],
+            extract: path.resolve('dist/bundle.css')
+        }),
         babel({
             exclude: 'node_modules/**',
             extensions: ['.js', '.jsx', '.ts', '.tsx']

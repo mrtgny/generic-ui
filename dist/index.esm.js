@@ -1,10 +1,14 @@
 import React, { useEffect, useCallback, useRef, useState, cloneElement, forwardRef, useImperativeHandle, useMemo } from 'react';
-import { coalasce, takeIf, useApi, useHistory, generatedColorFromString, changeColor } from '@reactivers/hooks';
+import { coalasce, takeIf, isNullOrUndefined, useApi, useHistory, generatedColorFromString, changeColor } from '@reactivers/hooks';
 import { SwatchesPicker } from 'react-color';
 import { Field as Field$1 } from 'rc-field-form';
 export { default as Form, useForm } from 'rc-field-form';
+export { Col, Grid, Row } from 'react-flexbox-grid';
+import Dialog from 'rc-dialog';
+import 'rc-dialog/assets/index.css';
 import 'rc-notification/assets/index.css';
 import Notification from 'rc-notification';
+import UUpload from 'rc-upload';
 
 var Badge = function Badge(props) {
   var title = props.title,
@@ -731,11 +735,22 @@ var Field = function Field(props) {
       width: '100%',
       margin: '16px 0'
     }, style || {})
-  }, /*#__PURE__*/React.createElement(Show, {
-    condition: name
-  }, /*#__PURE__*/React.createElement(Field$1, props)), /*#__PURE__*/React.createElement(Show, {
-    condition: !name
+  }, /*#__PURE__*/React.createElement(FieldOrChildren, {
+    name: name,
+    parentProps: props
   }, children));
+};
+
+var FieldOrChildren = function FieldOrChildren(props) {
+  var name = props.name,
+      parentProps = props.parentProps,
+      children = props.children;
+
+  if (isNullOrUndefined(name)) {
+    return children;
+  }
+
+  return /*#__PURE__*/React.createElement(Field$1, parentProps);
 };
 
 var Header = function Header(props) {
@@ -1040,6 +1055,16 @@ var InfiniteScrollView = /*#__PURE__*/forwardRef(function (props, ref) {
     condition: !hasData
   }, empty));
 });
+
+var Modal = function Modal(props) {
+  var children = props.children,
+      rest = _objectWithoutProperties(props, ["children"]);
+
+  return /*#__PURE__*/React.createElement(Dialog, _extends({
+    animation: "zoom",
+    transitionName: "zoom"
+  }, rest), children);
+};
 
 var notification = null;
 Notification.newInstance({
@@ -1528,4 +1553,15 @@ var ThreeDot = function ThreeDot(props) {
   }, children));
 };
 
-export { Badge, Button, Card, ColorPicker, EmptyResult, FadeAnimation, Field, Header, Image, IncDecField, InfiniteScrollView as InfiniteScroll, ListItem, Mapper, OverflowImages, Popover, Rate, Redirect, Section, Selectfield, Show, Tag, TextListField, Textfield, ThreeDot, appStyles, notification$1 as notification, notificationPusher };
+var Upload = function Upload(props) {
+  var style = props.style,
+      rest = _objectWithoutProperties(props, ["style"]);
+
+  return /*#__PURE__*/React.createElement(UUpload, _extends({
+    style: _objectSpread2({
+      outline: 'none'
+    }, style || {})
+  }, rest));
+};
+
+export { Badge, Button, Card, ColorPicker, EmptyResult, FadeAnimation, Field, Header, Image, IncDecField, InfiniteScrollView as InfiniteScroll, ListItem, Mapper, Modal, OverflowImages, Popover, Rate, Redirect, Section, Selectfield, Show, Tag, TextListField, Textfield, ThreeDot, Upload, appStyles, notification$1 as notification, notificationPusher };
