@@ -22,14 +22,11 @@ const Button = props => {
     let className = `no-select `
 
     const onClick = useCallback((e) => {
-        if (htmlType !== 'submit')
-            e.preventDefault()
+        if (htmlType !== 'submit') e.preventDefault()
         if (_onClick) _onClick(e);
     }, [htmlType, _onClick])
 
-
-    if (_className)
-        className += ` ${_className || ""}`
+    if (_className) className += ` ${_className || ""}`
 
     return (
         <button style={{

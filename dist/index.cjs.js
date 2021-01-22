@@ -7,8 +7,7 @@ var hooks = require('@reactivers/hooks');
 var reactColor = require('react-color');
 var rcFieldForm = require('rc-field-form');
 var reactFlexboxGrid = require('react-flexbox-grid');
-var Dialog = require('rc-dialog');
-require('rc-dialog/assets/index.css');
+var reactDom = require('react-dom');
 require('rc-notification/assets/index.css');
 var Notification = require('rc-notification');
 var UUpload = require('rc-upload');
@@ -17,7 +16,6 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 var rcFieldForm__default = /*#__PURE__*/_interopDefaultLegacy(rcFieldForm);
-var Dialog__default = /*#__PURE__*/_interopDefaultLegacy(Dialog);
 var Notification__default = /*#__PURE__*/_interopDefaultLegacy(Notification);
 var UUpload__default = /*#__PURE__*/_interopDefaultLegacy(UUpload);
 
@@ -303,10 +301,7 @@ var appStyles = {
     flexDirection: 'row'
   },
   card: {
-    backgroundColor: 'white',
-    borderBottomLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20
+    backgroundColor: 'white'
   },
   grid: {
     display: 'flex',
@@ -1067,14 +1062,101 @@ var InfiniteScrollView = /*#__PURE__*/React.forwardRef(function (props, ref) {
   }, empty));
 });
 
-var Modal = function Modal(props) {
-  var children = props.children,
-      rest = _objectWithoutProperties(props, ["children"]);
+var ModalRenderer = function ModalRenderer(props) {
+  var title = props.title,
+      children = props.children,
+      footer = props.footer;
+  return /*#__PURE__*/React__default['default'].createElement(React__default['default'].Fragment, null, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: {
+      borderBottom: '1px solid #eee'
+    }
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: {
+      margin: 0,
+      padding: 16,
+      fontSize: "1.2em",
+      fontWeight: 500
+    }
+  }, title)), /*#__PURE__*/React__default['default'].createElement("div", {
+    style: {
+      padding: 16
+    }
+  }, children), /*#__PURE__*/React__default['default'].createElement(Show, {
+    condition: footer
+  }, /*#__PURE__*/React__default['default'].createElement("div", {
+    style: {
+      borderTop: '1px solid #eee'
+    }
+  }, footer)));
+};
 
-  return /*#__PURE__*/React__default['default'].createElement(Dialog__default['default'], _extends({
-    animation: "zoom",
-    transitionName: "zoom"
-  }, rest), children);
+var Overlay = function Overlay(props) {
+  var _visible = props.visible,
+      _onClick = props.onClick,
+      children = props.children;
+
+  var _useState = React.useState(_visible),
+      _useState2 = _slicedToArray(_useState, 2),
+      visible = _useState2[0],
+      setVisible = _useState2[1];
+
+  React.useEffect(function () {
+    setTimeout(function () {
+      setVisible(_visible);
+    }, 1);
+  }, [_visible]);
+  var onClick = React.useCallback(function (e) {
+    setVisible(false);
+    setTimeout(function () {
+      _onClick(e);
+    }, 400);
+  }, [_onClick]);
+  if (!_visible) return null;
+  return /*#__PURE__*/React__default['default'].createElement("div", {
+    onClick: onClick,
+    style: _objectSpread2({
+      position: 'fixed',
+      zIndex: 1,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      inset: 0,
+      width: '100%',
+      height: '100%',
+      transition: "0.4s",
+      opacity: hooks.takeIf(visible, 1, 0),
+      display: hooks.takeIf(visible, 'block', 'none'),
+      overflow: 'auto',
+      pointerEvents: hooks.takeIf(visible, "initial", "none")
+    }, appStyles.center)
+  }, /*#__PURE__*/React__default['default'].createElement(reactFlexboxGrid.Col, {
+    onClick: function onClick(e) {
+      return e.stopPropagation();
+    },
+    xs: 10,
+    sm: 10,
+    md: 8,
+    lg: 8,
+    xl: 6,
+    style: {
+      backgroundColor: 'white',
+      position: 'absolute',
+      width: hooks.takeIf(visible, "100%", "0%"),
+      overflow: 'auto',
+      transition: '0.4s',
+      maxHeight: hooks.takeIf(visible, "90%", "0%")
+    }
+  }, children));
+};
+
+var Modal = function Modal(props) {
+  var visible = props.visible,
+      destroyOnClose = props.destroyOnClose,
+      onClose = props.onClose,
+      rest = _objectWithoutProperties(props, ["visible", "destroyOnClose", "onClose"]);
+
+  return /*#__PURE__*/reactDom.createPortal( /*#__PURE__*/React__default['default'].createElement(Overlay, {
+    onClick: onClose,
+    visible: visible
+  }, /*#__PURE__*/React__default['default'].createElement(ModalRenderer, rest)), document.body);
 };
 
 var notification = null;

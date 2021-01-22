@@ -69,9 +69,6 @@ const appStyles = {
     },
     card: {
         backgroundColor: 'white',
-        borderBottomLeftRadius: 20,
-        borderTopRightRadius: 20,
-        borderBottomRightRadius: 20,
     },
     grid: {
         display: 'flex',

@@ -3,9 +3,9 @@ import { coalasce, takeIf, isNullOrUndefined, useApi, useHistory, generatedColor
 import { SwatchesPicker } from 'react-color';
 import { Field as Field$1 } from 'rc-field-form';
 export { default as Form, useForm } from 'rc-field-form';
+import { Col } from 'react-flexbox-grid';
 export { Col, Grid, Row } from 'react-flexbox-grid';
-import Dialog from 'rc-dialog';
-import 'rc-dialog/assets/index.css';
+import { createPortal } from 'react-dom';
 import 'rc-notification/assets/index.css';
 import Notification from 'rc-notification';
 import UUpload from 'rc-upload';
@@ -292,10 +292,7 @@ var appStyles = {
     flexDirection: 'row'
   },
   card: {
-    backgroundColor: 'white',
-    borderBottomLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20
+    backgroundColor: 'white'
   },
   grid: {
     display: 'flex',
@@ -1056,14 +1053,101 @@ var InfiniteScrollView = /*#__PURE__*/forwardRef(function (props, ref) {
   }, empty));
 });
 
-var Modal = function Modal(props) {
-  var children = props.children,
-      rest = _objectWithoutProperties(props, ["children"]);
+var ModalRenderer = function ModalRenderer(props) {
+  var title = props.title,
+      children = props.children,
+      footer = props.footer;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderBottom: '1px solid #eee'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      margin: 0,
+      padding: 16,
+      fontSize: "1.2em",
+      fontWeight: 500
+    }
+  }, title)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 16
+    }
+  }, children), /*#__PURE__*/React.createElement(Show, {
+    condition: footer
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: '1px solid #eee'
+    }
+  }, footer)));
+};
 
-  return /*#__PURE__*/React.createElement(Dialog, _extends({
-    animation: "zoom",
-    transitionName: "zoom"
-  }, rest), children);
+var Overlay = function Overlay(props) {
+  var _visible = props.visible,
+      _onClick = props.onClick,
+      children = props.children;
+
+  var _useState = useState(_visible),
+      _useState2 = _slicedToArray(_useState, 2),
+      visible = _useState2[0],
+      setVisible = _useState2[1];
+
+  useEffect(function () {
+    setTimeout(function () {
+      setVisible(_visible);
+    }, 1);
+  }, [_visible]);
+  var onClick = useCallback(function (e) {
+    setVisible(false);
+    setTimeout(function () {
+      _onClick(e);
+    }, 400);
+  }, [_onClick]);
+  if (!_visible) return null;
+  return /*#__PURE__*/React.createElement("div", {
+    onClick: onClick,
+    style: _objectSpread2({
+      position: 'fixed',
+      zIndex: 1,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      inset: 0,
+      width: '100%',
+      height: '100%',
+      transition: "0.4s",
+      opacity: takeIf(visible, 1, 0),
+      display: takeIf(visible, 'block', 'none'),
+      overflow: 'auto',
+      pointerEvents: takeIf(visible, "initial", "none")
+    }, appStyles.center)
+  }, /*#__PURE__*/React.createElement(Col, {
+    onClick: function onClick(e) {
+      return e.stopPropagation();
+    },
+    xs: 10,
+    sm: 10,
+    md: 8,
+    lg: 8,
+    xl: 6,
+    style: {
+      backgroundColor: 'white',
+      position: 'absolute',
+      width: takeIf(visible, "100%", "0%"),
+      overflow: 'auto',
+      transition: '0.4s',
+      maxHeight: takeIf(visible, "90%", "0%")
+    }
+  }, children));
+};
+
+var Modal = function Modal(props) {
+  var visible = props.visible,
+      destroyOnClose = props.destroyOnClose,
+      onClose = props.onClose,
+      rest = _objectWithoutProperties(props, ["visible", "destroyOnClose", "onClose"]);
+
+  return /*#__PURE__*/createPortal( /*#__PURE__*/React.createElement(Overlay, {
+    onClick: onClose,
+    visible: visible
+  }, /*#__PURE__*/React.createElement(ModalRenderer, rest)), document.body);
 };
 
 var notification = null;
