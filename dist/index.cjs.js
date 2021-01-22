@@ -553,8 +553,8 @@ var Popover = function Popover(props) {
           left = _ref.left,
           top = _ref.top,
           bottom = _ref.bottom,
-          right = _ref.right,
-          height = _ref.height;
+          right = _ref.right;
+          _ref.height;
 
       switch (alignment) {
         case "bottom":
@@ -847,9 +847,9 @@ var IncDecField = function IncDecField(props) {
   var value = props.value,
       onChange = props.onChange,
       minusIcon = props.minusIcon,
-      plusIcon = props.plusIcon,
-      _size = props.size,
-      style = props.style,
+      plusIcon = props.plusIcon;
+      props.size;
+      var style = props.style,
       minusDisabled = props.minusDisabled,
       plusDisabled = props.plusDisabled,
       children = props.children;
@@ -923,8 +923,8 @@ var InfiniteScrollView = /*#__PURE__*/React.forwardRef(function (props, ref) {
 
   var _useState5 = React.useState({}),
       _useState6 = _slicedToArray(_useState5, 2),
-      filter = _useState6[0],
-      setFilter = _useState6[1];
+      filter = _useState6[0];
+      _useState6[1];
 
   var reloaderRef = React.useRef(null);
 
@@ -1148,9 +1148,9 @@ var Overlay = function Overlay(props) {
 };
 
 var Modal = function Modal(props) {
-  var visible = props.visible,
-      destroyOnClose = props.destroyOnClose,
-      onClose = props.onClose,
+  var visible = props.visible;
+      props.destroyOnClose;
+      var onClose = props.onClose,
       rest = _objectWithoutProperties(props, ["visible", "destroyOnClose", "onClose"]);
 
   return /*#__PURE__*/reactDom.createPortal( /*#__PURE__*/React__default['default'].createElement(Overlay, {
