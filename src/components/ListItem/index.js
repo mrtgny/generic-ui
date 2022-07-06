@@ -1,5 +1,4 @@
-import React from 'react';
-import {takeIf} from "@reactivers/hooks";
+import { takeIf } from "@reactivers/use-utils";
 import Show from "../Show";
 
 const ListItem = props => {
@@ -27,10 +26,10 @@ const ListItem = props => {
     const borderBottom = takeIf(lastItem, '1px solid #eee');
     const titleContainerClassName = takeIf(onTitleClick, "clickable", "")
     return (
-        <div style={{borderBottom, padding: 4, ...(style || {})}}
-             className={className}
-             onClick={onClick}>
-            <div style={{display: "flex", alignItems: 'center', ...(headerContainerStyle || {})}}>
+        <div style={{ borderBottom, padding: 4, ...(style || {}) }}
+            className={className}
+            onClick={onClick}>
+            <div style={{ display: "flex", alignItems: 'center', ...(headerContainerStyle || {}) }}>
                 <Show condition={avatar}>
                     <div style={{
                         display: 'flex',
@@ -46,8 +45,8 @@ const ListItem = props => {
                     padding: 4,
                     ...(titleContainerStyle || {})
                 }}
-                     onClick={onTitleClick}
-                     className={titleContainerClassName}>
+                    onClick={onTitleClick}
+                    className={titleContainerClassName}>
                     <Show condition={titleRenderer}>
                         {titleRenderer}
                     </Show>

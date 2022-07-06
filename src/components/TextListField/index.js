@@ -1,8 +1,8 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import Textfield from "../Textfield";
-import Button from "../Button";
+import { takeIf } from "@reactivers/use-utils";
+import { useCallback, useMemo, useState } from 'react';
 import appStyles from "../../utils/styles";
-import {takeIf} from "@reactivers/hooks";
+import Button from "../Button";
+import Textfield from "../Textfield";
 
 const TextListField = props => {
     const {
@@ -27,7 +27,7 @@ const TextListField = props => {
         if (!newValue[descriptionKey]) return;
 
         if (newValue.index !== undefined) {
-            const {index} = newValue;
+            const { index } = newValue;
             delete newValue.index;
             values[index] = newValue;
             _onChange([...values])
@@ -49,7 +49,7 @@ const TextListField = props => {
     }, [values, valueTransformer, _onChange])
 
 
-    const suffix = takeIf(checkButton, checkButton({disabled: !value[descriptionKey], onClick: onSave}), <Button
+    const suffix = takeIf(checkButton, checkButton({ disabled: !value[descriptionKey], onClick: onSave }), <Button
         icon={checkIcon}
         type="primary"
         disabled={!value[descriptionKey]}
@@ -58,7 +58,7 @@ const TextListField = props => {
 
     return (
         <>
-            <div style={{...appStyles.grid, ...(listContainerStyle || {})}}>
+            <div style={{ ...appStyles.grid, ...(listContainerStyle || {}) }}>
                 {values.map((item, index) => valuesRenderer({
                     item,
                     index,
@@ -68,14 +68,14 @@ const TextListField = props => {
                     onChange: commitChange
                 }))}
             </div>
-            <div style={{...appStyles.row, marginTop: 8}}>
+            <div style={{ ...appStyles.row, marginTop: 8 }}>
                 <Textfield value={value[descriptionKey]}
-                           containerClassName={textfieldContainerClassName}
-                           label={label}
-                           onChange={e => setValue({...value, [descriptionKey]: e.target.value})}
-                           onPressEnter={onSave}
-                           onBlur={onSave}
-                           suffix={suffix}
+                    containerClassName={textfieldContainerClassName}
+                    label={label}
+                    onChange={e => setValue({ ...value, [descriptionKey]: e.target.value })}
+                    onPressEnter={onSave}
+                    onBlur={onSave}
+                    suffix={suffix}
                 />
             </div>
         </>

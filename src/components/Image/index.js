@@ -1,7 +1,7 @@
-import React, {useCallback, useState} from 'react';
-import {coalasce, takeIf} from "@reactivers/hooks";
+import { coalasce, takeIf } from "@reactivers/use-utils";
+import { useCallback, useState } from 'react';
+import appStyles from '../../utils/styles';
 import Show from "../Show";
-import appStyles from '../../utils/styles'
 
 const Image = props => {
     const {
@@ -18,7 +18,7 @@ const Image = props => {
 
     const [loaded, setLoaded] = useState(false);
 
-    const size = takeIf(_size, {width: _size, height: _size, borderRadius: '50%'}, {});
+    const size = takeIf(_size, { width: _size, height: _size, borderRadius: '50%' }, {});
     const placeholder = coalasce(_placheholder, "P");
     const fontSize = takeIf(isNaN(_size / 2), 24, _size / 2);
     const displayImage = takeIf(loaded, undefined, 'none');
@@ -52,8 +52,8 @@ const Image = props => {
                 />
             </Show>
             <Show condition={!loaded && !hidePlaceholder}>
-                <div style={{width: '100%', height: '100%', ...appStyles.center}}>
-                    <p style={{margin: 0, fontSize, fontWeight: 'bold', padding: 4}}>{placeholder}</p>
+                <div style={{ width: '100%', height: '100%', ...appStyles.center }}>
+                    <p style={{ margin: 0, fontSize, fontWeight: 'bold', padding: 4 }}>{placeholder}</p>
                 </div>
             </Show>
         </div>

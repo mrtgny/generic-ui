@@ -1,22 +1,22 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import Show from "../Show";
-import {Col} from "../Grid";
-import {createPortal} from 'react-dom';
-import {takeIf} from '@reactivers/hooks'
+import { takeIf } from '@reactivers/use-utils';
+import { useCallback, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import appStyles from "../../utils/styles";
+import { Col } from "../Grid";
+import Show from "../Show";
 
 const ModalRenderer = props => {
-    const {title, children, footer} = props;
+    const { title, children, footer } = props;
     return (
         <>
-            <div style={{borderBottom: '1px solid #eee'}}>
-                <div style={{margin: 0, padding: 16, fontSize: "1.2em", fontWeight: 500}}>{title}</div>
+            <div style={{ borderBottom: '1px solid #eee' }}>
+                <div style={{ margin: 0, padding: 16, fontSize: "1.2em", fontWeight: 500 }}>{title}</div>
             </div>
-            <div style={{padding: 16}}>
+            <div style={{ padding: 16 }}>
                 {children}
             </div>
             <Show condition={footer}>
-                <div style={{borderTop: '1px solid #eee'}}>
+                <div style={{ borderTop: '1px solid #eee' }}>
                     {footer}
                 </div>
             </Show>
@@ -25,7 +25,7 @@ const ModalRenderer = props => {
 }
 
 const Overlay = props => {
-    const {visible: _visible, onClick: _onClick, children} = props;
+    const { visible: _visible, onClick: _onClick, children } = props;
     const [visible, setVisible] = useState(_visible);
 
     useEffect(() => {
@@ -45,30 +45,30 @@ const Overlay = props => {
 
     return (
         <div onClick={onClick}
-             style={{
-                 position: 'fixed',
-                 zIndex: 1,
-                 backgroundColor: 'rgba(0,0,0,0.5)',
-                 inset: 0,
-                 width: '100%',
-                 height: '100%',
-                 transition: "0.4s",
-                 opacity: takeIf(visible, 1, 0),
-                 display: takeIf(visible, 'block', 'none'),
-                 overflow: 'auto',
-                 pointerEvents: takeIf(visible, "initial", "none"),
-                 ...appStyles.center,
-             }}>
+            style={{
+                position: 'fixed',
+                zIndex: 1,
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                transition: "0.4s",
+                opacity: takeIf(visible, 1, 0),
+                display: takeIf(visible, 'block', 'none'),
+                overflow: 'auto',
+                pointerEvents: takeIf(visible, "initial", "none"),
+                ...appStyles.center,
+            }}>
             <Col onClick={e => e.stopPropagation()}
-                 xs={10} sm={10} md={8} lg={8} xl={6}
-                 style={{
-                     backgroundColor: 'white',
-                     position: 'absolute',
-                     width: takeIf(visible, "100%", "0%"),
-                     overflow: 'auto',
-                     transition: '0.4s',
-                     maxHeight: takeIf(visible, "90%", "0%"),
-                 }}>
+                xs={10} sm={10} md={8} lg={8} xl={6}
+                style={{
+                    backgroundColor: 'white',
+                    position: 'absolute',
+                    width: takeIf(visible, "100%", "0%"),
+                    overflow: 'auto',
+                    transition: '0.4s',
+                    maxHeight: takeIf(visible, "90%", "0%"),
+                }}>
                 {children}
             </Col>
         </div>
@@ -76,10 +76,10 @@ const Overlay = props => {
 }
 
 const Modal = props => {
-    const {visible, destroyOnClose, onClose, ...rest} = props;
+    const { visible, destroyOnClose, onClose, ...rest } = props;
     return createPortal(
         <Overlay onClick={onClose}
-                 visible={visible}>
+            visible={visible}>
             <ModalRenderer {...rest} />
         </Overlay>, document.body)
 }

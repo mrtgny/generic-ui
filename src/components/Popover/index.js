@@ -1,5 +1,5 @@
-import React, {useCallback, useRef, useState} from 'react';
-import {coalasce} from "@reactivers/hooks";
+import { coalasce } from "@reactivers/use-utils";
+import { useCallback, useRef, useState } from 'react';
 import Show from "../Show";
 
 const styles = {
@@ -18,7 +18,7 @@ const styles = {
 }
 
 const Popover = props => {
-    const {overlay, trigger: _trigger, alignment: _alignment, children} = props;
+    const { overlay, trigger: _trigger, alignment: _alignment, children } = props;
     const trigger = coalasce(_trigger, "click")
     const alignment = coalasce(_alignment, "bottom")
     const target = useRef(null);
@@ -29,7 +29,7 @@ const Popover = props => {
     const showPopover = useCallback(() => {
         setDisplayColorPicker(true)
         if (target.current) {
-            const {left, top, bottom, right, height} = target.current.getBoundingClientRect() || {};
+            const { left, top, bottom, right, height } = target.current.getBoundingClientRect() || {};
             switch (alignment) {
                 case "bottom":
                     setPosition({
@@ -87,18 +87,18 @@ const Popover = props => {
     return (
         <div>
             <div onClick={showPopoverClick}
-                 onMouseEnter={showPopoverMouseEnter}
-                 ref={target}>
+                onMouseEnter={showPopoverMouseEnter}
+                ref={target}>
                 {children}
             </div>
             <Show condition={displayColorPicker}>
                 <div style={styles.cover}
-                     onClick={closePopoverClick}
-                     onMouseEnter={closePopoverMouseEnter}
+                    onClick={closePopoverClick}
+                    onMouseEnter={closePopoverMouseEnter}
                 >
-                    <div style={{...styles.popover, ...position}}
-                         onClick={stopPropagation}
-                         onMouseEnter={stopPropagation}>
+                    <div style={{ ...styles.popover, ...position }}
+                        onClick={stopPropagation}
+                        onMouseEnter={stopPropagation}>
                         {overlay}
                     </div>
                 </div>

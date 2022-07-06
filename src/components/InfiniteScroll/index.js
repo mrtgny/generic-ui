@@ -1,7 +1,7 @@
-import React, {forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState} from 'react';
-import {useApi} from "@reactivers/hooks";
-import Show from "../Show";
+import { useApi } from "@reactivers/use-utils";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import Mapper from "../Mapper";
+import Show from "../Show";
 
 const InfiniteScrollView = forwardRef((props, ref) => {
     const {
@@ -19,7 +19,7 @@ const InfiniteScrollView = forwardRef((props, ref) => {
         loadingRenderer
     } = props;
     const apiOptions = _apiOptions || {};
-    const {method, params, onSuccess: apiOptionsOnSuccess} = apiOptions;
+    const { method, params, onSuccess: apiOptionsOnSuccess } = apiOptions;
 
     const pageSize = _pageSize || 5;
     const [page, setPage] = useState(1);
@@ -53,8 +53,8 @@ const InfiniteScrollView = forwardRef((props, ref) => {
         })
     }
 
-    const {fetched, firstTimeFetched, load: apiLoad, response} = useApi({onSuccess})
-    const {pageCount} = response.data || {};
+    const { fetched, firstTimeFetched, load: apiLoad, response } = useApi({ onSuccess })
+    const { pageCount } = response.data || {};
     const hasNextPage = (page || 1) < (pageCount || 2);
 
     const load = useCallback(() => {
@@ -65,7 +65,7 @@ const InfiniteScrollView = forwardRef((props, ref) => {
         const _method = method || (filterOptions ? "POST" : "GET");
         const _params = params || (filterOptions ? filter : undefined);
 
-        apiLoad({endpoint: _endpoint, method: _method, params: _params})
+        apiLoad({ endpoint: _endpoint, method: _method, params: _params })
 
     }, [page, pageCount, endpoint, pageSize, method, params, filterOptions, apiLoad, filter])
 
@@ -120,22 +120,22 @@ const InfiniteScrollView = forwardRef((props, ref) => {
     }, [onRefresh, onReload, reload])
 
     if (!firstTimeFetched) {
-        return shimmer ? <props.shimmer/> : <props.loadingRenderer/>
+        return shimmer ? <props.shimmer /> : <props.loadingRenderer />
     }
     const hasData = !!data.length
 
     return (
-        <div style={{padding: 16, ...(style || {})}}
-             ref={containerView}>
+        <div style={{ padding: 16, ...(style || {}) }}
+            ref={containerView}>
             <Show condition={hasData}>
-                <Mapper items={data} map={(item, index) => render(item, index, {page, pageSize})}/>
+                <Mapper items={data} map={(item, index) => render(item, index, { page, pageSize })} />
                 <Show condition={hasNextPage}>
                     <div ref={reloaderRef}>
                         <Show condition={shimmer}>
-                            <props.shimmer/>
+                            <props.shimmer />
                         </Show>
                         <Show condition={loadingRenderer}>
-                            <props.loadingRenderer style={{marginTop: 16}}/>
+                            <props.loadingRenderer style={{ marginTop: 16 }} />
                         </Show>
                     </div>
                 </Show>

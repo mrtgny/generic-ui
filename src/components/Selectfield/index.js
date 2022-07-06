@@ -1,7 +1,7 @@
-import React, {useCallback} from 'react';
-import {coalasce} from "@reactivers/hooks";
-import Show from "../Show";
+import { coalasce } from "@reactivers/use-utils";
+import { useCallback } from 'react';
 import Mapper from "../Mapper";
+import Show from "../Show";
 
 const Selectfield = props => {
     const {
@@ -29,16 +29,16 @@ const Selectfield = props => {
     return (
         <div className={className}>
             <Show condition={label}>
-                <p style={{fontWeight: 'bold'}}>{label}</p>
+                <p style={{ fontWeight: 'bold' }}>{label}</p>
             </Show>
             <select name={label}
-                    value={value || ""}
-                    onChange={onChange}
-                    className={selectFieldClassName}>
+                value={value || ""}
+                onChange={onChange}
+                className={selectFieldClassName}>
                 <Mapper items={items}>
                     <SelectfieldOption valueKey={valueKey}
-                                       descriptionKey={descriptionKey}
-                                       value={value}
+                        descriptionKey={descriptionKey}
+                        value={value}
                     />
                 </Mapper>
             </select>
@@ -47,13 +47,13 @@ const Selectfield = props => {
 }
 
 const SelectfieldOption = props => {
-    const {valueKey, value: _value, descriptionKey, ...rest} = props;
+    const { valueKey, value: _value, descriptionKey, ...rest } = props;
     const value = rest[valueKey];
     const description = rest[descriptionKey];
     return (
         <option value={value}
-                selected={value === _value}
-                className='select-field-option'
+            selected={value === _value}
+            className='select-field-option'
         >
             {description}
         </option>
